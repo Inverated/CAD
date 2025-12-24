@@ -16,7 +16,7 @@ def mirror(side):
     for i in range(0, panels_longitudinal // 2):
 
         aka = side.newObject("Part::Feature", f"Aka_{i} (aluminum)")
-        aka.Shape = rectangular_tube_capped(aka_width, aka_height, aka_thickness, aka_length,
+        aka.Shape = rectangular_tube_capped(aka_height, aka_width, aka_thickness, aka_length,
                                aka_cap_diameter, aka_cap_thickness)
         aka.Placement = FreeCAD.Placement(
             Base.Vector(aka_length - pillar_width / 2,
@@ -138,26 +138,6 @@ def mirror(side):
             FreeCAD.Rotation(rotation_axis2, rotation_angle2))
         set_color(brace_2, color_aluminum)
 
-    """
-    # aka_rudder may be needed to provide rudder mount,
-    # depending on panels_longitudinal and vaka_length
-
-    aka_rudder = side.newObject("Part::Feature", f"Aka Rudder (aluminum)")
-    aka_rudder.Shape = shs_capped(aka_width,
-                                  aka_thickness,
-                                  deck_width,
-                                  aka_cap_diameter,
-                                  aka_cap_thickness)
-    aka_rudder.Placement = FreeCAD.Placement(
-        Base.Vector(aka_length - pillar_width / 2,
-                    panel_width * panels_longitudinal // 2 +
-                    crossdeck_width / 2 +
-                    panel_width / 2 - aka_width / 2,
-                    aka_base_level),
-        FreeCAD.Rotation(Base.Vector(0, -1, 0), 90))
-    set_color(aka_rudder, color_aluminum)
-    """
-
     # aka_end supports the deck at the ends of the boat
     
     aka_end = side.newObject("Part::Feature", f"Aka End (aluminum)")
@@ -207,7 +187,7 @@ def mirror(side):
     inner_stanchion.Placement = FreeCAD.Placement(
         Base.Vector(vaka_displacement
                     - deck_width / 2 + aka_width / 2,
-                    vaka_length / 2 - aka_width / 2,
+                    vaka_length / 2 - gunwale_width / 2,
                     aka_base_level),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
     set_color(inner_stanchion, color_aluminum)
@@ -258,8 +238,8 @@ def mirror(side):
     for i in range(0, deck_stringers):
         deck_stringer = side.newObject("Part::Feature", f"Deck_Stringer_{i} (aluminum)")
         deck_stringer.Shape = shs(stringer_width,
-                              stringer_thickness,
-                              vaka_length / 2 + aka_width / 2 - panel_width)
+                                  stringer_thickness,
+                                  (vaka_length - cockpit_length) / 2)
         deck_stringer.Placement = FreeCAD.Placement(
             Base.Vector(vaka_displacement - deck_width / 2 +
                         (deck_width - stringer_width) / (deck_stringers - 1) * i,
@@ -285,7 +265,7 @@ def mirror(side):
 
     deck = side.newObject("Part::Feature", "Deck (plywood)")
     deck.Shape = Part.makeBox(deck_width,
-                              vaka_length / 2 + aka_width / 2 - panel_width,
+                              (vaka_length - cockpit_length) / 2,
                               deck_thickness)
     deck.Placement = FreeCAD.Placement(
         Base.Vector(vaka_displacement - deck_width / 2,

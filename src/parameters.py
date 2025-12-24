@@ -14,6 +14,8 @@ deck_stringers = 4
 
 # parameters; all in mm
 
+mm_in_one_inch = 25.4
+
 panel_length = 1762
 panel_width = 1134
 panel_height = 30
@@ -40,7 +42,7 @@ aka_cap_diameter = 170
 vaka_length = 9000
 vaka_width = 1150
 vaka_thickness = 5
-gunwale_height = 50
+
 overhead_thickness = 3
 sole_thickness = 300
 
@@ -58,7 +60,7 @@ panel_stringer_length = crossdeck_width + panels_longitudinal * panel_width
 
 freeboard = 1200
 aka_base_level = freeboard + overhead_thickness
-stringer_base_level = aka_base_level + aka_width
+stringer_base_level = aka_base_level + aka_height
 panel_base_level = stringer_base_level + stringer_width
 deck_base_level = panel_base_level
 deck_level = deck_base_level + deck_thickness
@@ -73,7 +75,7 @@ stanchion_thickness = 3
 spine_thickness = aka_thickness
 spine_width = aka_width
 spine_base_level = aka_base_level - spine_width
-spine_length = panel_width * (1 + panels_longitudinal)
+spine_length = panel_width * panels_longitudinal + crossdeck_width
 
 pillar_thickness = aka_thickness
 pillar_width = aka_width
@@ -92,15 +94,13 @@ vaka_displacement = (- pillar_width / 2
                      + panel_length * panels_transversal
                      + deck_width / 2)
 
-mm_in_one_inch = 25.4
-
-gunwale_thickness = 3 * mm_in_one_inch
+gunwale_width = 3 * mm_in_one_inch
 gunwale_height = 2 * mm_in_one_inch
 
 mast_diameter = 152.4
 mast_thickness = 6.35
 mast_height = 8500
-mast_distance_from_center = vaka_length / 4 + 65 # adjustment to not cut into aka
+mast_distance_from_center = vaka_length / 4 + 120 # adjustment to not cut into aka
 
 mast_partner_length = vaka_width - 110
 mast_partner_width = mast_diameter + 200

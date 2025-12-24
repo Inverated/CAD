@@ -87,7 +87,7 @@ def single(boat):
 
     gunwale = boat.addObject("Part::Feature", "Gunwale")
     gunwale.Shape = elliptical_pipe(vaka_length, vaka_width,
-                                    gunwale_thickness, gunwale_height)
+                                    gunwale_width, gunwale_height)
     gunwale.Placement = FreeCAD.Placement(
         Base.Vector(vaka_displacement, 0, freeboard - gunwale_height),
         FreeCAD.Rotation(Base.Vector(0, 0, 1), 90))
