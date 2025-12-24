@@ -73,6 +73,44 @@ def shs_capped(outer, wall, length, cap_diameter, cap_thickness):
     
     return shs.fuse(cap1).fuse(cap2)
 
+# Rectangular tube with caps
+
+def rectangular_tube_capped(outer1, outer2, wall, length, cap_diameter, cap_thickness):
+    # Create outer square
+    outer_square = Part.makePolygon([
+        Base.Vector(0, 0, 0),
+        Base.Vector(outer1, 0, 0),
+        Base.Vector(outer1, outer2, 0),
+        Base.Vector(0, outer2, 0),
+        Base.Vector(0, 0, 0)
+    ])
+
+    # Create inner square (offset inward)
+    inner1 = outer1 - 2*wall
+    inner2 = outer2 - 2*wall
+    offset = wall
+    inner_square = Part.makePolygon([
+        Base.Vector(offset, offset, 0),
+        Base.Vector(outer1-offset, offset, 0),
+        Base.Vector(outer1-offset, outer2-offset, 0),
+        Base.Vector(offset, outer2-offset, 0),
+        Base.Vector(offset, offset, 0)
+    ])
+
+    # Create faces and extrude
+    outer_face = Part.Face(outer_square)
+    inner_face = Part.Face(inner_square)
+    profile = outer_face.cut(inner_face)
+    shs = profile.extrude(Base.Vector(0, 0, length))
+
+    cap_radius = cap_diameter / 2
+    cap1 = Part.makeCylinder(cap_radius, cap_thickness)
+    cap1.translate(Base.Vector(outer1/2, outer2/2, - cap_thickness))
+    cap2 = Part.makeCylinder(cap_radius, cap_thickness)
+    cap2.translate(Base.Vector(outer1/2, outer2/2, length))
+    
+    return shs.fuse(cap1).fuse(cap2)
+
 # circular pipe
 
 def pipe(diameter, thickness, length):

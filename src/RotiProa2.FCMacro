@@ -16,10 +16,21 @@ except NameError:
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
     
-# Remove any cached versions and then reload
 if 'parameters' in sys.modules:
     del sys.modules['parameters']
 from parameters import *
+
+if 'sailing' in sys.modules:
+    del sys.modules['sailing']
+from sailing import * 
+
+# choose one of the following points of sail (see sailing.py)
+
+close_haul()
+#beam_reach()
+#goose_wing()
+#play()
+
 if 'shapes' in sys.modules:
     del sys.modules['shapes']
 from shapes import * 
@@ -114,8 +125,13 @@ view = FreeCAD.Gui.ActiveDocument.ActiveView
 view.viewIsometric()  # or viewFront(), viewTop(), etc.
 view.fitAll()
 
+# choose one of the following views (see view.py)
+
 #set_interior_view()
 #set_mast_view()
 #set_cockpit_view()
 #set_below_view()
 set_sail_view()
+
+
+

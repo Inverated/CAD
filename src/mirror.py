@@ -16,7 +16,7 @@ def mirror(side):
     for i in range(0, panels_longitudinal // 2):
 
         aka = side.newObject("Part::Feature", f"Aka_{i} (aluminum)")
-        aka.Shape = shs_capped(aka_width, aka_thickness, aka_length,
+        aka.Shape = rectangular_tube_capped(aka_width, aka_height, aka_thickness, aka_length,
                                aka_cap_diameter, aka_cap_thickness)
         aka.Placement = FreeCAD.Placement(
             Base.Vector(aka_length - pillar_width / 2,

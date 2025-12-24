@@ -1,29 +1,9 @@
-# -*- mode: python -*-
-
-"""
-# sailing parameters: close haul
-sail_camber = 5000  # radius of cylindrical curvature (must not be less than half of sail height)
-biru_rig_rotation = -15
-biru_sail_angle = 30
-kuning_rig_rotation = -20
-kuning_sail_angle = 30
-"""
-
-# sailing parameters: beam reach
-sail_camber = 3000  # radius of cylindrical curvature (must not be less than half of sail height)
-biru_rig_rotation = -15
-biru_sail_angle = 30
-kuning_rig_rotation = -20
-kuning_sail_angle = 30
-
-"""
-# sailing parameters: close haul
-sail_camber = 5000  # radius of cylindrical curvature (must not be less than half of sail height)
-biru_rig_rotation = -15
-biru_sail_angle = 30
-kuning_rig_rotation = -20
-kuning_sail_angle = 30
-"""
+# sailing parameters: set by the functions in sailing.py
+sail_camber = 10000
+biru_rig_rotation = 0
+biru_sail_angle = 0
+kuning_rig_rotation = 0
+kuning_sail_angle = 0
 
 # number of solar panels
 panels_longitudinal = 6
@@ -49,8 +29,9 @@ ama_cone_length = 1000
 stringer_width = 25
 stringer_thickness = 3
 
-aka_width = 100
-aka_thickness = 5
+aka_width = 76.2
+aka_height = 101.6
+aka_thickness = 4.5
 aka_length = panel_length * panels_transversal + deck_width
 
 aka_cap_thickness = 5
@@ -116,9 +97,9 @@ mm_in_one_inch = 25.4
 gunwale_thickness = 3 * mm_in_one_inch
 gunwale_height = 2 * mm_in_one_inch
 
-mast_diameter = 120
-mast_thickness = 5
-mast_height = 7500
+mast_diameter = 152.4
+mast_thickness = 6.35
+mast_height = 8500
 mast_distance_from_center = vaka_length / 4 + 65 # adjustment to not cut into aka
 
 mast_partner_length = vaka_width - 110
@@ -144,16 +125,16 @@ yard_spar_distance_from_top = 500
 yard_spar_height = mast_height - yard_spar_distance_from_top
 
 # Sail parameters (tanja sail)
-yard_diameter = 80
-yard_thickness = 4
-yard_length = vaka_length / 2 - 50
+yard_diameter = 63.5
+yard_thickness = 2.8
+yard_length = 5500
 
-boom_diameter = 80
-boom_thickness = 4
-boom_length = vaka_length / 2 - 50
+boom_diameter = yard_diameter
+boom_thickness = yard_thickness
+boom_length = yard_length
 
-sail_height = 4500  # vertical distance between yard and boom
-sail_width  = vaka_length / 2 - 50
+sail_height = 5500  # vertical distance between yard and boom
+sail_width  = yard_length
 sail_thickness = 2  # thin membrane
 
 # Colors (RGB values from 0.0 to 1.0)
