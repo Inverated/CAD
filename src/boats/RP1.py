@@ -1,9 +1,9 @@
 # number of solar panels
-panels_longitudinal = 6
-panels_transversal =  3
+panels_longitudinal = 2
+panels_transversal =  1
 
 # number of deck stringers
-deck_stringers = 4
+deck_stringers = 2
 
 # parameters; all in mm
 
@@ -13,13 +13,13 @@ panel_length = 1762
 panel_width = 1134
 panel_height = 30
 
-deck_width = 2000
+deck_width = 1000
 deck_thickness = 9
 
-ama_diameter = 370
+ama_diameter = 200
 ama_thickness = 10
-ama_length = 9000
-ama_cone_length = 1000
+ama_length = 4000
+ama_cone_length = 500
 
 stringer_width = 25
 stringer_thickness = 3
@@ -32,14 +32,14 @@ aka_length = panel_length * panels_transversal + deck_width
 aka_cap_thickness = 5
 aka_cap_diameter = 170
 
-vaka_length = 13000
-vaka_width = 1150
+vaka_length = 4200
+vaka_width = 500
 vaka_thickness = 5
 
 overhead_thickness = 3
-sole_thickness = 300
+sole_thickness = 150
 
-crossdeck_width = 900
+crossdeck_width = 650
 crossdeck_thickness = deck_thickness
 crossdeck_length = (panels_transversal * panel_length +
                   (deck_width - vaka_width) / 2 +
@@ -51,7 +51,7 @@ cockpit_length = panel_width + crossdeck_width - aka_width
 panel_stringer_offset = panel_length / 4 - stringer_width / 2
 panel_stringer_length = crossdeck_width + panels_longitudinal * panel_width
 
-freeboard = 1200
+freeboard = 600
 aka_base_level = freeboard + overhead_thickness
 stringer_base_level = aka_base_level + aka_height
 panel_base_level = stringer_base_level + stringer_width
@@ -90,10 +90,10 @@ vaka_displacement = (- pillar_width / 2
 gunwale_width = 3 * mm_in_one_inch
 gunwale_height = 2 * mm_in_one_inch
 
-mast_diameter = 152.4
-mast_thickness = 6.35
-mast_height = 8500
-mast_distance_from_center = vaka_length / 4 + 120 # adjustment to not cut into aka
+mast_diameter = 100
+mast_thickness = 5
+mast_height = 5500
+mast_distance_from_center = vaka_length / 4 # adjustment to not cut into aka
 
 mast_partner_length = vaka_width - 110
 mast_partner_width = mast_diameter + 200
@@ -109,7 +109,7 @@ mast_handle_length = 600
 mast_handle_height_above_deck = 600
 
 mast_cap_thickness = 3
-mast_cap_diameter = 150
+mast_cap_diameter = 100
 
 yard_spar_length = 500
 yard_spar_width = 50
@@ -118,15 +118,15 @@ yard_spar_distance_from_top = 500
 yard_spar_height = mast_height - yard_spar_distance_from_top
 
 # Sail parameters (tanja sail)
-yard_diameter = 63.5
+yard_diameter = 25
 yard_thickness = 2.8
-yard_length = 5500
+yard_length = 3500
 
 boom_diameter = yard_diameter
 boom_thickness = yard_thickness
 boom_length = yard_length
 
-sail_height = 5500  # vertical distance between yard and boom
+sail_height = 3500  # vertical distance between yard and boom
 sail_width  = yard_length
 sail_thickness = 2  # thin membrane
 
@@ -136,7 +136,6 @@ rudder_post_diameter = 50
 rudder_head_length = 200
 rudder_blade_length = 500
 rudder_blade_height = 500
-rudder_distance_from_vaka = 250
+rudder_distance_from_vaka = 100
 rudder_below_sole = 500
-
 

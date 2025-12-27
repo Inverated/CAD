@@ -3,6 +3,7 @@ import Part
 from FreeCAD import Base
 import math
 
+from colors import *
 from parameters import *
 from shapes import *
 

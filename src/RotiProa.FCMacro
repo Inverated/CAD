@@ -66,6 +66,12 @@ except Exception as e:
 # Now import into global namespace
 exec(f"from {configuration_file} import *")
 
+print("Importing colors...")
+if 'colors' in sys.modules: del sys.modules['colors']
+from colors import *
+
+print(color_ama)
+
 print("Importing shapes...")
 if 'shapes' in sys.modules: del sys.modules['shapes']
 from shapes import *
