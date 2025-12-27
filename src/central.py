@@ -1,4 +1,5 @@
-# all parts that are mirrored about the transversal axis
+# all parts that are central (symmetric along the transversal axis)
+# vaka, ama spine, sole, overhead, central stanchions
 
 import FreeCAD
 import Part
@@ -9,11 +10,11 @@ from parameters import *
 from shapes import *
 from material import *
 
-def single(boat):
+def central(vessel):
 
     # spine (longitudinal beam to support the akas)
 
-    spine = boat.addObject("Part::Feature", "Spine (aluminum)")
+    spine = vessel.newObject("Part::Feature", "Spine (aluminum)")
     spine.Shape = shs_capped(spine_width,
                              spine_thickness,
                              spine_length,
@@ -41,7 +42,7 @@ def single(boat):
     
     # overhead (ceiling of cabin)
     
-    overhead = boat.addObject("Part::Feature", "Overhead (plywood)")
+    overhead = vessel.newObject("Part::Feature", "Overhead (plywood)")
     overhead.Shape = elliptical_cylinder(vaka_length,
                                          vaka_width,
                                          overhead_thickness)
@@ -51,9 +52,9 @@ def single(boat):
     overhead.Shape = overhead.Shape.cut(cockpit_cutter_transformed)
     set_color(overhead, color_plywood)
 
-    # sole: floor of boat
+    # sole: floor of vessel
     
-    sole = boat.addObject("Part::Feature", "Sole")
+    sole = vessel.newObject("Part::Feature", "Sole")
     # Create the flat sole cylinder
     sole_cylinder = elliptical_cylinder(vaka_length,
                                         vaka_width,
@@ -77,7 +78,7 @@ def single(boat):
         FreeCAD.Rotation(Base.Vector(0, 0, 1), 90))
     set_color(sole, color_sole)
 
-    hull = boat.addObject("Part::Feature", "Hull")
+    hull = vessel.newObject("Part::Feature", "Hull")
     hull.Shape = elliptical_pipe(vaka_length, vaka_width,
                                  vaka_thickness, freeboard - sole_thickness)
     hull.Placement = FreeCAD.Placement(
@@ -85,7 +86,7 @@ def single(boat):
         FreeCAD.Rotation(Base.Vector(0, 0, 1), 90))
     set_color(hull, color_hull_exterior)
 
-    gunwale = boat.addObject("Part::Feature", "Gunwale")
+    gunwale = vessel.newObject("Part::Feature", "Gunwale")
     gunwale.Shape = elliptical_pipe(vaka_length, vaka_width,
                                     gunwale_width, gunwale_height)
     gunwale.Placement = FreeCAD.Placement(
@@ -93,7 +94,7 @@ def single(boat):
         FreeCAD.Rotation(Base.Vector(0, 0, 1), 90))
     set_color(gunwale, color_hull_exterior)
 
-    outer_crossdeck_stanchion = boat.addObject("Part::Feature",
+    outer_crossdeck_stanchion = vessel.newObject("Part::Feature",
                                               f"Outer_Crossdeck_Stanchion (aluminum)")
     outer_crossdeck_stanchion.Shape = pipe(stanchion_diameter,
                                            stanchion_thickness,
@@ -105,8 +106,9 @@ def single(boat):
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
     set_color(outer_crossdeck_stanchion, color_aluminum)
 
-    center_crossdeck_stanchion = boat.addObject("Part::Feature",
-                                               f"Center_Crossdeck_Stanchion (aluminum)")
+    center_crossdeck_stanchion = (
+        vessel.newObject("Part::Feature",
+                         "Center_Crossdeck_Stanchion (aluminum)"))
     center_crossdeck_stanchion.Shape = pipe(stanchion_diameter,
                                             stanchion_thickness,
                                             stanchion_length)

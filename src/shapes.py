@@ -109,7 +109,7 @@ def rectangular_tube_capped(outer1, outer2, wall, length, cap_diameter, cap_thic
     cap2 = Part.makeCylinder(cap_radius, cap_thickness)
     cap2.translate(Base.Vector(outer1/2, outer2/2, length))
     
-    return shs #.fuse(cap1).fuse(cap2)
+    return shs.fuse(cap1).fuse(cap2)
 
 # circular pipe
 
@@ -192,7 +192,6 @@ def elliptical_pipe(major_diameter, minor_diameter, thickness, length):
     elliptical_pipe = profile.extrude(Base.Vector(0, 0, length))
     
     return elliptical_pipe
-
 
 # ellipsoid
 

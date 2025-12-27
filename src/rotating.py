@@ -6,9 +6,9 @@ import math
 from parameters import *
 from shapes import *
 
-# masts and sails
+# rig: masts and sails
 
-def rig(the_rig, sail_angle=0):
+def rig(the_rig, sail_angle=0, sail_camber=10000):
     """
     Build a rig with rotatable sail
     sail_angle: rotation angle in degrees around the yard spar axis
@@ -143,5 +143,23 @@ def rig(the_rig, sail_angle=0):
     sail = the_rig.newObject("Part::Feature", "Sail")
     sail.Shape = sail_section
     set_color(sail, color_sail)
+
+# rudder: post and blade
+
+def rudder(the_rudder):
+
+    # post
+    
+    post = the_rudder.newObject("Part::Feature", "Rudder Post")
+    post.Shape = Part.makeCylinder(rudder_post_diameter / 2,
+                                   stringer_base_level
+                                   + rudder_head_length
+                                   + rudder_below_sole)
+    post.Placement = FreeCAD.Placement(
+        Base.Vector(0, 0, 0),
+        FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
+    set_color(post, color_aluminum)
+
+    return post
 
 

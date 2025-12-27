@@ -1,6 +1,6 @@
 # number of solar panels
 panels_longitudinal = 6
-panels_transversal =  2
+panels_transversal =  3
 
 # number of deck stringers
 deck_stringers = 4
@@ -32,7 +32,7 @@ aka_length = panel_length * panels_transversal + deck_width
 aka_cap_thickness = 5
 aka_cap_diameter = 170
 
-vaka_length = 9000
+vaka_length = 13000
 vaka_width = 1150
 vaka_thickness = 5
 

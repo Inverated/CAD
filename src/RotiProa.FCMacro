@@ -6,6 +6,9 @@ import FreeCAD
 import Part
 from FreeCAD import Base
 
+print(f"FreeCAD version = {FreeCAD.Version()}")
+print(f"FreeCAD.GuiUp = {FreeCAD.GuiUp}")
+
 # Try to get the directory of the current file
 try:
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -15,60 +18,112 @@ except NameError:
 
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
-    
-if 'parameters' in sys.modules:
-    del sys.modules['parameters']
-from parameters import *
 
-if 'sailing' in sys.modules:
-    del sys.modules['sailing']
-from sailing import * 
+# FreeCAD puts its own arguments first, macro arguments come after the macro filename
+# Find where the macro name is and take arguments after that
+macro_args = []
+for i, arg in enumerate(sys.argv):
+    if arg.endswith('.FCMacro'):
+        macro_args = sys.argv[i+1:]
+        break
 
-# choose one of the following points of sail (see sailing.py)
+print(f"sys.argv = {sys.argv}")
+print(f"macro_args = {macro_args}")
 
-#close_haul()
-beam_reach()
-#broad_reach()
-#goose_wing()
-#play()
+# Get parameter file from command line, default to RP2
+param_file = macro_args[0] if macro_args else 'boats.RP2'
+print(f"param_file = {param_file}")
+# Import the specified parameters
+if param_file in sys.modules:
+    del sys.modules[param_file]
+# Create an alias so other modules can import 'parameters'
+import importlib
+try:
+    params_module = importlib.import_module(param_file)
+    sys.modules['parameters'] = params_module
+    print(f"Successfully imported {param_file}")
+except Exception as e:
+    print(f"ERROR importing {param_file}: {e}")
+    raise
+# Now import into global namespace
+exec(f"from {param_file} import *")
 
-if 'shapes' in sys.modules:
-    del sys.modules['shapes']
-from shapes import * 
-if 'rotating' in sys.modules:
-    del sys.modules['rotating']
-from rotating import * 
-if 'mirror' in sys.modules:
-    del sys.modules['mirror']
-from mirror import * 
-if 'single' in sys.modules:
-    del sys.modules['single']
-from single import * 
-if 'stats' in sys.modules:
-    del sys.modules['stats']
-from stats import * 
-if 'material' in sys.modules:
-    del sys.modules['material']
-from material import * 
+# Get configuration file from command line, default to CloseHaul
+configuration_file = macro_args[1] if macro_args else 'configurations.CloseHaul'
+print(f"configuration_file = {configuration_file}")
+# Import the specified configuration
+if configuration_file in sys.modules:
+    del sys.modules[configuration_file]
+# Create an alias so other modules can import 'configuration'
+import importlib
+try:
+    configuration_module = importlib.import_module(configuration_file)
+    sys.modules['configuration'] = configuration_module
+    print(f"Successfully imported {configuration_file}")
+except Exception as e:
+    print(f"ERROR importing {configuration_file}: {e}")
+    raise
+# Now import into global namespace
+exec(f"from {configuration_file} import *")
+
+print("Importing shapes...")
+if 'shapes' in sys.modules: del sys.modules['shapes']
+from shapes import *
+
+print("Importing rotating...")
+if 'rotating' in sys.modules: del sys.modules['rotating']
+from rotating import *
+
+print("Importing mirror...")
+if 'mirror' in sys.modules: del sys.modules['mirror']
+from mirror import *
+
+print("Importing central...")
+if 'central' in sys.modules: del sys.modules['central']
+from central import *
+
+print("Importing stats...")
+if 'stats' in sys.modules: del sys.modules['stats']
+from stats import *
+
+print("Importing material...")
+if 'material' in sys.modules: del sys.modules['material']
+from material import *
+
+print("All imports complete") 
 
 # Close all open documents
 for doc_name in App.listDocuments():
     App.closeDocument(doc_name)
 
 # initialize FreeCAD document
-# clean up existing document
+# In console mode, there's no ActiveDocument, so create one
 
-doc_name = "Roti Proa II"
-if FreeCAD.ActiveDocument and FreeCAD.ActiveDocument.Name == doc_name:
-    doc = FreeCAD.ActiveDocument
-    # Clear all objects from existing document (in reverse order)
-    for obj in reversed(doc.Objects):
-        doc.removeObject(obj.Name)
-else:
-    # Close any existing document with this name
-    if doc_name in [d.Name for d in FreeCAD.listDocuments().values()]:
-        FreeCAD.closeDocument(doc_name)
+doc_name = "Roti Proa"
+
+# Close all open documents first
+for d in FreeCAD.listDocuments().values():
+    FreeCAD.closeDocument(d.Name)
+
+# Create new document
+try:
     doc = FreeCAD.newDocument(doc_name)
+    print(f"Created document, doc = {doc}")
+    print(f"Document name: {doc.Name}")
+    
+    FreeCAD.setActiveDocument(doc.Name)  # Use actual doc name, not the label
+    print(f"Set active document")
+    
+    doc.recompute()
+    print(f"Recomputed document")
+    
+    print(f"doc = {doc}")
+    print(f"doc.Name = {doc.Name}")
+except Exception as e:
+    print(f"ERROR creating document: {e}")
+    import traceback
+    traceback.print_exc()
+    raise
 
 # mirrored parts: Biru (blue) side is on the right as seen
 # standing on the vaka facing the ama
@@ -92,47 +147,137 @@ for obj in biru.Group:
     mirrored_obj.Placement = obj.Placement  # Copy the placement too
     
     # Copy the color
-    mirrored_obj.ViewObject.ShapeColor = obj.ViewObject.ShapeColor
+    if hasattr(obj, 'ViewObject') and obj.ViewObject:    
+        mirrored_obj.ViewObject.ShapeColor = obj.ViewObject.ShapeColor
 
-# rig: translated in y-direction
+# rig: each rig (biru and kuning) is
+# constructed at origin in rotating.py,
+# then rotated, then translated in x and y-direction
+
+# rig_biru with specified rotation and camber
 
 rig_biru = doc.addObject("App::Part", "Rig: Biru")
-rig(rig_biru, sail_angle=biru_sail_angle)  # 25 degree sail rotation
+rig(rig_biru, sail_angle=sail_angle_biru,
+    sail_camber=sail_camber_biru)
 rig_biru.Placement = FreeCAD.Placement(
     Base.Vector(vaka_displacement, mast_distance_from_center, sole_thickness),
-    FreeCAD.Rotation(Base.Vector(0, 0, 1), biru_rig_rotation))  # no rig rotation
+    FreeCAD.Rotation(Base.Vector(0, 0, 1), rig_rotation_biru))
+
+# rig_kuning with specified rotation and camber
 
 rig_kuning = doc.addObject("App::Part", "Rig: Kuning")
-rig(rig_kuning, sail_angle=kuning_sail_angle)  # 25 degree sail rotation (same)
+rig(rig_kuning, sail_angle=sail_angle_kuning)
 rig_kuning.Placement = FreeCAD.Placement(
     Base.Vector(vaka_displacement, - mast_distance_from_center, sole_thickness),
-    FreeCAD.Rotation(Base.Vector(0, 0, 1), kuning_rig_rotation))
+    FreeCAD.Rotation(Base.Vector(0, 0, 1), rig_rotation_kuning))
 
-# single: unmirrored components: hull, sole, etc
-single(doc)
+# rudder: each rudder (biru and kuning) is
+# constructed at origin in rotating.py,
+# then rotated, then translated in x and y-direction
+
+# rudder_biru with rudder_rotation_biru
+
+rudder_biru = doc.addObject("App::Part", "Rudder: Biru")
+rudder(rudder_biru)
+rudder_biru.Placement = FreeCAD.Placement(
+    Base.Vector(vaka_displacement - vaka_width / 2
+                - rudder_distance_from_vaka,
+                cockpit_length / 2
+                + (panels_longitudinal / 2 - 1) * panel_width
+                + aka_width / 2,
+                - rudder_below_sole),
+    FreeCAD.Rotation(Base.Vector(0, 0, 1), rudder_rotation_biru))
+
+# rudder_kuning with rudder_rotation_kuning
+
+rudder_kuning = doc.addObject("App::Part", "Rudder: Kuning")
+rudder(rudder_kuning)
+rudder_kuning.Placement = FreeCAD.Placement(
+    Base.Vector(vaka_displacement - vaka_width / 2
+                - rudder_distance_from_vaka,
+                - cockpit_length / 2
+                - (panels_longitudinal / 2 - 1) * panel_width
+                - aka_width / 2,
+                - rudder_below_sole),
+    FreeCAD.Rotation(Base.Vector(0, 0, 1), rudder_rotation_kuning))
+
+# boat: central unmirrored components: hull, sole, etc
+
+vessel = doc.addObject("App::Part", "Vessel: Central")
+central(vessel)
 
 # recompute before stats and rendering
 doc.recompute()
 
 # print out stats
+
 calculate_weight(doc)
 
-if 'view' in sys.modules:
-    del sys.modules['view']
-from view import * 
+# Save the document (with boat-specific name)
+# Get the boat name from param_file (e.g., 'boats.RP2' -> 'RP2')
+boat_name = param_file.split('.')[-1] if '.' in param_file else 'default'
 
-# set preferred view
-view = FreeCAD.Gui.ActiveDocument.ActiveView
-view.viewIsometric()  # or viewFront(), viewTop(), etc.
-view.fitAll()
+# Save the document (with configuration-specific name)
+# Get the configuration name from configuration_file (e.g., 'configuration.CloseHaul' -> 'CloseHaul')
+configuration_name = configuration_file.split('.')[-1] if '.' in configuration_file else 'default'
 
-# choose one of the following views (see view.py)
+# Create output directory relative to the CAD directory (parent of src)
+output_dir = os.path.join(current_dir, "..", "output")
+os.makedirs(output_dir, exist_ok=True)
+
+output_path = os.path.join(output_dir, f"RotiProa_{boat_name}_{configuration_name}.FCStd")
+
+# In console mode, we need to initialize the GUI document to save view properties
+# This ensures objects will be visible when loaded in GUI mode
+if not FreeCAD.GuiUp:
+    try:
+        import FreeCADGui
+        # Create GUI document
+        FreeCADGui.getDocument(doc.Name)
+        print("Created GUI document structure for visibility")
+        
+        # Now set all objects visible
+        def make_all_visible(obj_list):
+            """Recursively make all objects and their children visible"""
+            for obj in obj_list:
+                try:
+                    if hasattr(obj, 'ViewObject') and obj.ViewObject:
+                        obj.ViewObject.Visibility = True
+                except:
+                    pass
+                # Recurse into groups/parts
+                if hasattr(obj, 'Group') and obj.Group:
+                    make_all_visible(obj.Group)
+        
+        # Apply to all objects
+        make_all_visible(doc.Objects)
+        print("Set all objects visible")
+    except Exception as e:
+        print(f"Could not set visibility (this is OK): {e}")
+
+# Save
+doc.saveAs(output_path)
+print(f"Saved document to {output_path}")
+
+# GUI-only code - skip in console mode
+if FreeCAD.GuiUp:
+    if 'view' in sys.modules:
+        del sys.modules['view']
+    from view import * 
+
+    # set preferred view
+    view = FreeCAD.Gui.ActiveDocument.ActiveView
+    view.viewIsometric()
+    view.fitAll()
+
+    set_sail_view()
 
 #set_interior_view()
 #set_mast_view()
 #set_cockpit_view()
 #set_below_view()
-set_sail_view()
 
-
+# Exit console mode cleanly (but not GUI mode)
+if not FreeCAD.GuiUp:
+    sys.exit(0)
 

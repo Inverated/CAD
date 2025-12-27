@@ -16,6 +16,7 @@ cat > "$TEMP_SCRIPT" << 'EOF'
 import FreeCAD
 import FreeCADGui
 import sys
+import os
 
 filepath = sys.argv[-1]
 print(f"Opening {filepath}...")
@@ -42,10 +43,27 @@ doc.save()
 
 print("Done!")
 FreeCAD.closeDocument(doc.Name)
+
+# Force quit FreeCAD
+os._exit(0)
 EOF
 
-# Run FreeCAD with the script
-"$FREECAD" "$TEMP_SCRIPT" "$FCSTD_FILE"
+# Run FreeCAD with the script (in background with timeout)
+"$FREECAD" "$TEMP_SCRIPT" "$FCSTD_FILE" &
+FREECAD_PID=$!
+
+# Wait up to 10 seconds for it to finish
+for i in {1..20}; do
+    if ! kill -0 $FREECAD_PID 2>/dev/null; then
+        break
+    fi
+    sleep 0.5
+done
+
+# Force kill if still running
+if kill -0 $FREECAD_PID 2>/dev/null; then
+    kill -9 $FREECAD_PID 2>/dev/null
+fi
 
 # Clean up
 rm -f "$TEMP_SCRIPT"

@@ -2,3 +2,6 @@
 __pycache__
 .DS_Store
 *.zip
+output/
+*.FCStd
+*.FCStd1

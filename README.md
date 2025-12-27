@@ -16,8 +16,24 @@ All components need to be specified in software, in `src`. Features include:
 
 3. Start FreeCAD
 
-4. File > Open, then choose the file `src/RotiProa2.FCStd`
+4. Macro > Macros, then choose the file `src/RotiProa.FCMacro`
 
-5. Macro > Macros, then choose the file `src/RotiProa2.FCMacro`
+5. You should see Roti Proa II in the FreeCAD view
 
-6. You should see Roti Proa in the FreeCAD view
+## Playing with the FreeCAD GUI
+
+- Play with `src/boats/RP2.py`: change parameters such as the number of solar panels, length of the boat, etc and rerun the macro to see the result.
+- Play with `src/boats/CloseHaul.py`: change the sail settings and rerun the macro to see the result.
+
+## Generating `FCStd` files from command line
+
+To generate all files (all boat designs with all configurations) just type
+```
+make
+```
+Or to generate an individual `FCStd` file type
+```
+make build BOAT=RP2 CONFIG=CloseHaul
+```
+After loading a generated `FCStd` file, you may need to turn off the
+visibility of the `Origin...` objects in all container objects.
