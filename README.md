@@ -29,6 +29,8 @@ All components are specified in software, in `src` as the _single source of trut
 
 ## Generating `FCStd` files from command line
 
+[For this, you need to have a working `make` utility. Currently tested only on Mac; feel free to try this on Windows and let us know your results, using a PR or issue.]
+
 To generate all files (all boat designs with all configurations) just type
 ```
 make
