@@ -11,7 +11,7 @@ mm_in_one_inch = 25.4
 
 panel_length = 1762
 panel_width = 1134
-panel_height = 30
+panel_height = 4
 
 deck_width = 1000
 deck_thickness = 9

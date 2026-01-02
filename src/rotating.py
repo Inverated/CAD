@@ -9,12 +9,14 @@ from shapes import *
 
 # rig: masts and sails
 
-def rig(the_rig, sail_angle=0, sail_camber=10000):
+def rig(the_rig, sail_angle=0, sail_camber=10000, reefing_percentage=0):
     """
     Build a rig with rotatable sail
     sail_angle: rotation angle in degrees around the yard spar axis
     """
 
+    effective_sail_height = sail_height * (100 - reefing_percentage) / 100
+    
     # mast
     
     mast = the_rig.newObject("Part::Feature", "Mast (aluminum)")
@@ -92,18 +94,18 @@ def rig(the_rig, sail_angle=0, sail_camber=10000):
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 90 + sail_angle))  # Rotate around X axis
     set_color(yard, color_bamboo)
     
-    # Boom - parallel to yard, offset by sail_height VERTICALLY from the pivot
+    # Boom - parallel to yard, offset by effective_sail_height VERTICALLY from the pivot
     boom = the_rig.newObject("Part::Feature", "Boom (aluminum)")
     boom.Shape = pipe(boom_diameter, boom_thickness, boom_length)
     
     # Boom rotates around the SAME pivot point as yard
-    # But its unrotated position is sail_height below the pivot
-    # So we need to rotate the point (0, boom_length/2, -sail_height) around the pivot
+    # But its unrotated position is effective_sail_height below the pivot
+    # So we need to rotate the point (0, boom_length/2, -effective_sail_height) around the pivot
     
-    # In unrotated position: boom center is at (0, boom_length/2, -sail_height) relative to pivot
+    # In unrotated position: boom center is at (0, boom_length/2, -effective_sail_height) relative to pivot
     # After rotation by angle around X axis:
     boom_local_y = boom_length / 2
-    boom_local_z = -sail_height
+    boom_local_z = -effective_sail_height
     
     # Rotate this point around X axis (pivot is origin)
     boom_offset_y = boom_local_y * math.cos(angle_rad) - boom_local_z * math.sin(angle_rad)
@@ -116,8 +118,8 @@ def rig(the_rig, sail_angle=0, sail_camber=10000):
     
     # Sail surface - hollow cylinder (thin membrane)
     
-    cylinder_center_z = -sail_height / 2
-    vertical_offset = sail_height / 2
+    cylinder_center_z = -effective_sail_height / 2
+    vertical_offset = effective_sail_height / 2
     cylinder_center_x = -math.sqrt(sail_camber**2 - vertical_offset**2)
     
     # hollow cylinder
@@ -130,8 +132,8 @@ def rig(the_rig, sail_angle=0, sail_camber=10000):
     cylinder = outer_cylinder.cut(inner_cylinder)
     
     box_width = sail_camber * 2
-    sail_box = Part.makeBox(box_width, yard_length, sail_height,
-                            Base.Vector(0, -yard_length/2, -sail_height))
+    sail_box = Part.makeBox(box_width, yard_length, effective_sail_height,
+                            Base.Vector(0, -yard_length/2, -effective_sail_height))
     
     sail_section = cylinder.common(sail_box)
     

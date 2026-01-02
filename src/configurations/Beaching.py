@@ -10,6 +10,6 @@ rudder_rotation_kuning = 0
 rudder_raised_biru = True
 rudder_raised_kuning = True
 
-reefing_percentage = 100
+reefing_percentage = 90
 
 
