@@ -30,7 +30,7 @@ The prototype proved that solar proas are viable for tropical Southeast Asian wa
 
 ## Featured Publication
 
-For a detailed account of the Roti Proa I development, testing, and lessons learned, read the full article published by the Civil Service College Singapore:
+For a detailed account of the Roti Proa I development, testing, and lessons learned, read the full article published by the Changi Sailing Club in Singapore:
 
 **[Roti Proa: An Experimental Wind and Solar Powered Boat](https://www.csc.org.sg/2025/07/11/roti-proa-an-experimental-wind-and-solar-powered-boat/)**
 
@@ -111,7 +111,7 @@ Roti Proa I was funded through:
 
 The success of Roti Proa I demonstrates that our vision is technically sound. Now, with Roti Proa II under construction, we're taking the next step toward commercial viability—a vessel designed not just to prove a concept, but to serve real eco-tourism operations in tropical Southeast Asia.
 
-**Read the full story:** [Civil Service College Singapore Article →](https://www.csc.org.sg/2025/07/11/roti-proa-an-experimental-wind-and-solar-powered-boat/)
+**Read the full story:** [Changi Sailing Club Article →](https://www.csc.org.sg/2025/07/11/roti-proa-an-experimental-wind-and-solar-powered-boat/)
 
 ---
 
