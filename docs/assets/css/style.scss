@@ -1,0 +1,54 @@
+---
+---
+
+@import "jekyll-theme-cayman";
+
+/* Maritime and tropical color palette */
+:root {
+  --ocean-deep: #0a4c6d;
+  --ocean-medium: #2d7a9c;
+  --ocean-light: #4fa8c5;
+  --sand: #f4e4c1;
+  --wood: #8b6f47;
+  --bamboo: #d4af37;
+  --tropical-green: #2d5016;
+  --sunset: #ff6b35;
+}
+
+/* Override theme colors with maritime palette */
+.page-header {
+  background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 50%, var(--ocean-light) 100%);
+}
+
+.project-name {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  opacity: 1 !important;
+}
+
+.project-tagline {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+  opacity: 0.95 !important;
+}
+
+.btn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+h1, h2, h3 {
+  color: var(--ocean-deep);
+  border-bottom: 2px solid var(--ocean-light);
+  padding-bottom: 0.3em;
+  margin-top: 1.5em;
+}
+
+a {
+  color: var(--ocean-medium);
+}
+
+a:hover {
+  color: var(--ocean-deep);
+}

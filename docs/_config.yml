@@ -1,5 +1,5 @@
-title: Roti Proa
-description: Solar-electric proa designs and documentation
+title: Prahu Surya Layar
+description: Solar-Electric Hybrid Vessels for Tropical Eco-Tourism
 theme: jekyll-theme-cayman
 baseurl: /CAD
 
@@ -9,3 +9,22 @@ markdown: kramdown
 # Include the renders directory
 include:
   - renders
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: RP1 (Prototype)
+    url: /rp1.html
+  - title: RP2 (MVP)
+    url: /rp2.html
+  - title: RP3 (Future)
+    url: /rp3.html
+  - title: Technical Details
+    url: /technical.html
+
+# Project metadata
+project:
+  coordinator: "A/Prof Martin Henz"
+  institution: "School of Computing, National University of Singapore"
+  email: "henz@nus.edu.sg"

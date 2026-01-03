@@ -1,0 +1,118 @@
+---
+layout: default
+title: Roti Proa I - 4.2m Prototype
+---
+
+# Roti Proa I
+## 4.2-Meter Proof-of-Concept Prototype
+
+[← Back to Home]({{ '/' | relative_url }})
+
+---
+
+## Overview
+
+**Status:** ✅ Completed and tested (December 2024 - June 2025)
+
+Roti Proa I was our proof-of-concept prototype that validated the feasibility of combining traditional outrigger design with modern solar-electric propulsion in tropical waters. The 4.2-meter vessel successfully demonstrated the core principles that inform our larger commercial designs.
+
+**Key Achievements:**
+- **Sea trials validated** in Singapore waters near Changi
+- **Top speed:** 6.5 knots (12 km/h) under electric power
+- **Solar capacity:** 1kW peak (2 panels)
+- **Propulsion:** 2kW electric outboard motor
+- **Battery:** LiFePO₄ system
+- **Sailing rig:** Dual independent sport rigs for experimental configuration
+
+The prototype proved that solar proas are viable for tropical Southeast Asian waters and provided crucial data for scaling up to the 9-meter Roti Proa II design.
+
+---
+
+## Featured Publication
+
+For a detailed account of the Roti Proa I development, testing, and lessons learned, read the full article published by the Civil Service College Singapore:
+
+**[Roti Proa: An Experimental Wind and Solar Powered Boat](https://www.csc.org.sg/2025/07/11/roti-proa-an-experimental-wind-and-solar-powered-boat/)**
+
+This comprehensive article covers:
+- Design philosophy and traditional influences
+- Construction process and material choices
+- Sea trial results and performance data
+- Lessons learned for future development
+- Technical challenges and solutions
+
+---
+
+## Quick Specifications
+
+| Specification | Value |
+|--------------|-------|
+| Overall Length (LOA) | 4.2m |
+| Beam | 2.5m |
+| Solar Power | 1kW peak |
+| Motor Power | 2kW electric outboard |
+| Battery Type | LiFePO₄ |
+| Top Speed | 6.5 knots |
+| Crew | 1-2 persons |
+| Status | Testing completed June 2025 |
+
+---
+
+## 3D Renders
+
+*Parametric CAD models showing different configurations*
+
+{% assign render_files = site.static_files | where_exp: "file", "file.path contains 'renders'" | where_exp: "file", "file.path contains 'RP1'" | where_exp: "file", "file.extname == '.png'" %}
+
+{% if render_files.size > 0 %}
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1em; margin: 2em 0;">
+{% for file in render_files limit:8 %}
+  <div>
+    <img src="{{ file.path | relative_url }}" alt="{{ file.basename }}" style="width: 100%; border: 1px solid #ddd; border-radius: 4px;">
+    <p style="text-align: center; font-size: 0.9em; color: #666; margin-top: 0.5em;">
+      {{ file.basename | replace: "RotiProa_RP1_", "" | replace: "_", " " }}
+    </p>
+  </div>
+{% endfor %}
+</div>
+
+<p style="text-align: center; margin-top: 2em;">
+  <a href="{{ '/rp1-gallery.html' | relative_url }}">View All RP1 Configurations →</a>
+</p>
+{% else %}
+  <p><em>Renders being generated...</em></p>
+{% endif %}
+
+---
+
+## Legacy & Impact
+
+Roti Proa I's successful trials provided the confidence and empirical data needed to pursue commercial-scale development. The prototype demonstrated that:
+
+✅ Solar-electric propulsion is viable in tropical waters  
+✅ Traditional outrigger designs adapt well to modern electric systems  
+✅ Shunting proas can effectively integrate solar panels  
+✅ The combination creates a compelling eco-tourism experience
+
+These insights directly informed the design of Roti Proa II and validate our approach for the 13-meter Roti Proa III.
+
+---
+
+## Funding & Support
+
+Roti Proa I was funded through:
+- **Maybank Green Fund:** S$5,000 (via NUS Office of Student Affairs)
+- **Private donations and sponsorships:** S$7,000
+- **Total project cost:** S$12,000
+
+---
+
+## From Prototype to Product
+
+The success of Roti Proa I demonstrates that our vision is technically sound. Now, with Roti Proa II under construction, we're taking the next step toward commercial viability—a vessel designed not just to prove a concept, but to serve real eco-tourism operations in tropical Southeast Asia.
+
+**Read the full story:** [Civil Service College Singapore Article →](https://www.csc.org.sg/2025/07/11/roti-proa-an-experimental-wind-and-solar-powered-boat/)
+
+---
+
+[← Back to Home]({{ '/' | relative_url }}) | [View RP2 →]({{ '/rp2.html' | relative_url }}) | [View RP3 →]({{ '/rp3.html' | relative_url }})
