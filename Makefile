@@ -110,6 +110,18 @@ render-all: $(RENDER_DIR)
 		fi \
 	done
 	@echo "All renders complete!"
+	@echo "Cropping images with ImageMagick..."
+	@if command -v convert >/dev/null 2>&1; then \
+		for img in $(RENDER_DIR)/*.png; do \
+			if [ -f "$$img" ]; then \
+				echo "Cropping $$img..."; \
+				convert "$$img" -fuzz 1% -trim +repage -bordercolor white -border 20 "$$img" || true; \
+			fi \
+		done; \
+		echo "Cropping complete!"; \
+	else \
+		echo "ImageMagick not found, skipping crop"; \
+	fi
 
 # Clean generated files
 .PHONY: clean

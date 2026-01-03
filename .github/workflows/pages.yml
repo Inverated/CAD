@@ -41,7 +41,7 @@ jobs:
         run: |
           # Install xvfb for headless rendering
           sudo apt-get update
-          sudo apt-get install -y xvfb
+          sudo apt-get install -y xvfb imagemagick
           
           # Create wrapper for running FreeCAD in console mode (for builds)
           cat > freecadcmd << 'WRAPPER_EOF'
