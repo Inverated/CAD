@@ -120,21 +120,28 @@ The vessel can be configured for different sailing conditions and use cases:
 
 ## Download CAD Models
 
+Access parametric FreeCAD models for all sail configurations.
+These files include the complete 3D geometry and can be modified for your specific requirements.
+
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1em; margin: 2em 0;">
-{% for file in site.static_files %}
-  {% if file.path contains 'downloads' and file.path contains 'RP2' and file.extname == '.FCStd' %}
+{% for config in site.data.rp2_downloads.configurations %}
   <div style="padding: 1em; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
     <div style="font-size: 2em; margin-bottom: 0.5em;">📐</div>
-    <a href="{{ file.path | relative_url }}" style="font-weight: bold;">
-      {{ file.basename | replace: "SolarProa_RP2_", "" | replace: "_", " " }}
+    <a href="{{ '/downloads/' | append: config.filename | relative_url }}" style="font-weight: bold; display: block; margin-bottom: 0.5em;">
+      {{ config.name | replace: "_", " " }}
     </a>
-    <div style="font-size: 0.85em; color: #666; margin-top: 0.3em;">
-      {{ file.size | divided_by: 1024 }} KB
+    {% if config.description %}
+    <div style="font-size: 0.85em; color: #666;">
+      {{ config.description }}
     </div>
+    {% endif %}
   </div>
-  {% endif %}
 {% endfor %}
 </div>
+
+**Software Required:** [FreeCAD](https://www.freecad.org/) (free and open-source)
+
+**License:** Models are shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) - free to use, modify, and share with attribution.
 
 ---
 

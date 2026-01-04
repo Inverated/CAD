@@ -50,7 +50,7 @@ FCSTD := $(DESIGN_DIR)/$(DESIGN_NAME).FCStd
 STEP := $(EXPORT_DIR)/$(DESIGN_NAME).step
 
 .PHONY: all
-all:	design-all render-all stats-all
+all:	design-all render-all stats-all downloads-yaml
 
 # Default target - design all boats with all configurations
 .PHONY: design-all
@@ -126,6 +126,13 @@ stats-all: $(DESIGN_DIR)
 		fi \
 	done
 	@echo "All stats complete!"
+
+# Generate downloads YAML for Jekyll
+.PHONY: downloads-yaml
+downloads-yaml:
+	@echo "Generating downloads YAML..."
+	python3 $(SRC_DIR)/generate_downloads_yaml.py
+	@echo "Downloads YAML complete!"
 
 # Render images from single FCStd file (assumes FCSTD exists)
 .PHONY: render-only
