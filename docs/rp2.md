@@ -118,9 +118,23 @@ The vessel can be configured for different sailing conditions and use cases:
 
 ---
 
-## Download CAD Files
+## Download CAD Models
 
-*Coming soon: Access to parametric FreeCAD models and construction documentation*
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1em; margin: 2em 0;">
+{% for file in site.static_files %}
+  {% if file.path contains 'downloads' and file.path contains 'RP2' and file.extname == '.FCStd' %}
+  <div style="padding: 1em; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+    <div style="font-size: 2em; margin-bottom: 0.5em;">📐</div>
+    <a href="{{ file.path | relative_url }}" style="font-weight: bold;">
+      {{ file.basename | replace: "SolarProa_RP2_", "" | replace: "_", " " }}
+    </a>
+    <div style="font-size: 0.85em; color: #666; margin-top: 0.3em;">
+      {{ file.size | divided_by: 1024 }} KB
+    </div>
+  </div>
+  {% endif %}
+{% endfor %}
+</div>
 
 ---
 
