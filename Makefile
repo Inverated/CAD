@@ -262,7 +262,7 @@ localhost:
 
 # Make zip file with just the newest versions of the git files
 .PHONY: zip
-zip:
+zip:	clean
 	@echo "Make zip file with current working directory"
 	@rm -f ../CAD-clean.zip
 	git ls-files | zip -@ ../CAD-clean.zip

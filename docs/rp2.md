@@ -38,7 +38,7 @@ title: Roti Proa II - 9m Day Tourism Vessel
 - Integrated battery management
 
 **Sailing Rig:**
-- Dual carbon fiber stay-less masts
+- Dual aluminum stay-less masts
 - Traditional tanja-inspired rectangular sails
 - Shunting configuration for tropical conditions
 - Backup propulsion capability
