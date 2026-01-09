@@ -9,7 +9,7 @@ title: Roti Proa II - 9m Day Tourism Vessel
     <h2 style="margin-top: 0.5em; font-weight: 300;">9-Meter Solar-Electric Day Tourism Vessel</h2>
   </div>
   <div style="flex: 1; min-width: 300px; max-width: 500px;">
-    <img src="{{ '/renders/rp2.closehaul.render.view3.png' | relative_url }}" alt="Roti Proa II" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="{{ '/renders/rp2.closehaul.render.isometric.png' | relative_url }}" alt="Roti Proa II" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   </div>
 </div>
 
@@ -97,7 +97,7 @@ The vessel can be configured for different sailing conditions and use cases:
     <div>
       <img src="{{ file.path | relative_url }}" alt="{{ file.basename }}" style="width: 100%; border: 1px solid #ddd; border-radius: 4px;">
       <p style="text-align: center; font-size: 0.9em; color: #666; margin-top: 0.5em;">
-        {{ file.basename | remove: "rp2." | remove: config | remove: ".render." | remove: "_" | replace: "Front", "Front View" | replace: "Isometric", "Isometric View" | replace: "Right", "Right View" | replace: "Top", "Top View" }}
+        {{ file.basename | remove: "rp2." | remove: config | remove: ".render." | remove: "_" | replace: "front", "Front View" | replace: "isometric", "Isometric View" | replace: "right", "Right View" | replace: "top", "Top View" }}
       </p>
     </div>
   {% endfor %}

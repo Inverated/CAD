@@ -4,7 +4,7 @@ title: Solar Proa - Wind-solar-powered Outrigger Boats
 ---
 
 <div style="margin-bottom: 3em;">
-  <img src="{{ '/renders/rp2.closehaul.render.view3.png' | relative_url }}" alt="Roti Proa II - Solar-Electric Day Tourism Vessel" style="width: 100%; max-width: 1200px; height: auto; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); display: block; margin: 0 auto;">
+  <img src="{{ '/renders/rp2.closehaul.render.isometric.png' | relative_url }}" alt="Roti Proa II - Solar-Electric Day Tourism Vessel" style="width: 100%; max-width: 1200px; height: auto; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); display: block; margin: 0 auto;">
   <p style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Roti Proa II - 9m solar-electric day tourism vessel</p>
 </div>
 

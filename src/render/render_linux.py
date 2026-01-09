@@ -150,10 +150,10 @@ def export_renders(fcstd_path, output_render):
     
     # Define views to export
     views = [
-        ('Isometric', 'viewIsometric'),
-        ('Front', 'viewFront'),
-        ('Top', 'viewTop'),
-        ('Right', 'viewRight'),
+        ('isometric', 'viewIsometric'),
+        ('front', 'viewFront'),
+        ('top', 'viewTop'),
+        ('right', 'viewRight'),
     ]
     
     # Disable animation for faster rendering

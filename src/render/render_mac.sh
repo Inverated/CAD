@@ -96,10 +96,10 @@ doc.recompute()
 
 # Define views to export
 views = [
-    ('Isometric', 'viewIsometric'),
-    ('Front', 'viewFront'),
-    ('Top', 'viewTop'),
-    ('Right', 'viewRight'),
+    ('isometric', 'viewIsometric'),
+    ('front', 'viewFront'),
+    ('top', 'viewTop'),
+    ('right', 'viewRight'),
 ]
 
 # Get active view

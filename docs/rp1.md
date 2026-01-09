@@ -9,7 +9,7 @@ title: Roti Proa I - 4.2m Prototype
     <h2 style="margin-top: 0.5em; font-weight: 300;">4.2-Meter Proof-of-Concept Prototype</h2>
   </div>
   <div style="flex: 1; min-width: 300px; max-width: 500px;">
-    <img src="{{ '/renders/rp1.closehaul.render.view3.png' | relative_url }}" alt="Roti Proa I" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="{{ '/renders/rp1.closehaul.render.isometric.png' | relative_url }}" alt="Roti Proa I" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   </div>
 </div>
 
