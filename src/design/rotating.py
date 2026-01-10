@@ -3,7 +3,6 @@ import Part
 from FreeCAD import Base
 import math
 
-from colors import *
 from shapes import *
 
 # rig: masts and sails
@@ -25,7 +24,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
     mast.Placement = FreeCAD.Placement(
         Base.Vector(0, 0, params['mast_base_level']),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(mast, color_aluminum)
 
     mast_cap = the_rig.newObject("Part::Feature", "Mast Cap (aluminum)")
     mast_cap.Shape = Part.makeCylinder(params['mast_cap_diameter'] / 2,
@@ -33,7 +31,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
     mast_cap.Placement = FreeCAD.Placement(
         Base.Vector(0, 0, params['mast_height'] + params['mast_base_level']),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(mast_cap, color_aluminum)
     
     # yard spar - attachment point for the sail yard
 
@@ -47,7 +44,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
                     - params['yard_spar_width'] / 2,
                     params['yard_spar_height']),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(yard_spar, color_aluminum)
 
     # yard spar brace - 45 degree brace for yard spar
     yard_spar_brace = the_rig.newObject("Part::Feature",
@@ -60,7 +56,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
                     - params['yard_spar_width'] / 2,
                     params['mast_height']),
         FreeCAD.Rotation(Base.Vector(0, 1, 0), 45))
-    set_color(yard_spar, color_aluminum)
     
     # mast handle
     mast_handle = the_rig.newObject("Part::Feature", "Mast Handle (aluminum)")
@@ -72,7 +67,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
                     params['mast_handle_length'] / 2,
                     params['deck_level'] + params['mast_handle_height_above_deck']),
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 90))
-    set_color(yard_spar, color_aluminum)
     
     # Pivot point for sail rotation (at the yard centerline, end of yard spar)
     pivot_x = params['yard_spar_length'] + params['mast_diameter'] / 2
@@ -94,7 +88,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
     yard.Placement = FreeCAD.Placement(
         Base.Vector(pivot_x, pivot_y + yard_offset_y, pivot_z + yard_offset_z),
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 90 + sail_angle))  # Rotate around X axis
-    set_color(yard, color_aluminum)
     
     # Boom - parallel to yard, offset by effective_sail_height VERTICALLY from the pivot
     boom = the_rig.newObject("Part::Feature", "Boom (aluminum)")
@@ -118,7 +111,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
     boom.Placement = FreeCAD.Placement(
         Base.Vector(pivot_x, pivot_y + boom_offset_y, pivot_z + boom_offset_z),
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 90 + sail_angle))
-    set_color(boom, color_aluminum)
     
     # Sail surface - hollow cylinder (thin membrane)
     
@@ -157,7 +149,6 @@ def rig(the_rig, params, sail_angle=0, sail_camber=10000, reefing_percentage=0):
     
     sail = the_rig.newObject("Part::Feature", "Sail (nylon)")
     sail.Shape = sail_section
-    set_color(sail, color_sail)
 
 # rudder: post and blade
 
@@ -173,7 +164,6 @@ def rudder(the_rudder, params, raised):
     post.Placement = FreeCAD.Placement(
         Base.Vector(0, 0, z_offset - params['rudder_blade_height']),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(post, color_steel)
 
     bearing_block = the_rudder.newObject("Part::Feature", "Rudder_Bearing_Block (plastic)")
     bearing_block.Shape = Part.makeCylinder(params['rudder_bearing_block_diameter'] / 2,
@@ -181,7 +171,6 @@ def rudder(the_rudder, params, raised):
     bearing_block.Placement = FreeCAD.Placement(
         Base.Vector(0, 0, params['stringer_base_level'] + z_offset),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(bearing_block, color_plastic)
 
     aka_mount_pin = the_rudder.newObject("Part::Feature", "Rudder_Mount_Pin (aluminum)")
     aka_mount_pin.Shape = Part.makeCylinder(params['rudder_aka_mount_pin_diameter'] / 2,
@@ -191,7 +180,6 @@ def rudder(the_rudder, params, raised):
                     params['rudder_aka_mount_pin_length'] / 2,
                     params['stringer_base_level'] + z_offset + params['stringer_width'] / 2),
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 90))
-    set_color(aka_mount_pin, color_aluminum)
 
     cap = the_rudder.newObject("Part::Feature", "Rudder_Cap (steel)")
     cap.Shape = Part.makeCylinder(params['rudder_aka_mount_pin_length'] / 2 + 10, # 10mm space
@@ -199,7 +187,6 @@ def rudder(the_rudder, params, raised):
     cap.Placement = FreeCAD.Placement(
         Base.Vector(0, 0, z_offset + params['deck_base_level']),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(cap, color_steel)
 
     # cutting into tillers
     
@@ -236,7 +223,6 @@ def rudder(the_rudder, params, raised):
         tiller_a_rotation)
     tiller_a.Shape = tiller_a.Shape.cut(tiller_cutter_cylinder_shape)
     tiller_a.Shape = tiller_a.Shape.cut(tiller_cutter_box_shape)
-    set_color(tiller_a, color_aluminum)
     
     tiller_b = the_rudder.newObject("Part::Feature", "Tiller_B (aluminum)")
     tiller_b.Shape = shs(params['tiller_width'],
@@ -251,7 +237,6 @@ def rudder(the_rudder, params, raised):
         tiller_b_rotation)
     tiller_b.Shape = tiller_b.Shape.cut(tiller_cutter_cylinder_shape)
     tiller_b.Shape = tiller_b.Shape.cut(tiller_cutter_box_shape)
-    set_color(tiller_b, color_aluminum)
 
     # steel ribs (rods) for rudder
     rib_spacing = (params['rudder_blade_height'] - 2
@@ -268,7 +253,6 @@ def rudder(the_rudder, params, raised):
                         + z_offset
                         - params['rudder_blade_height']),
             FreeCAD.Rotation(Base.Vector(1, 0, 0), 90))
-        set_color(rib, color_aluminum)
 
     # blade: thin sheet to indicate the shape of rudder
     blade = the_rudder.newObject("Part::Feature", "Rudder_Blade (plywood)")
@@ -280,5 +264,4 @@ def rudder(the_rudder, params, raised):
                     - params['rudder_blade_length'] / 2,
                     z_offset - params['rudder_blade_height']),
         FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-    set_color(blade, color_plywood)
     
