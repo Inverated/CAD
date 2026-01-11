@@ -79,7 +79,7 @@ jobs:
           count=0
           for file in artifacts/*.json; do
             if [ -f "$file" ]; then
-              basename=$(basename "$file" .validate.json)
+              basename=$(basename "$file" .json)
               # Convert rp2.closehaul to rp2_closehaul for Jekyll
               newname=$(echo "$basename" | tr '.' '_')
               cp "$file" "docs/_data/${newname}.json"

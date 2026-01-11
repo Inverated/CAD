@@ -19,7 +19,7 @@ title: Roti Proa II - 9m Day Tourism Vessel
 
 ## Specifications
 
-**Overall Length:** {{ site.data.rp2_closehaul.parameters.vaka_length }}mm
+**Overall Length:** {{ site.data.rp2_closehaul.parameters.vaka_length }}mm  
 **Beam:** {{ site.data.rp2_closehaul.parameters.beam }}mm (with outrigger)  
 **Total mass:** {{ site.data.rp2_beaching.mass.total_mass_kg }}kg  
 **Total unsinkable volume:** {{ site.data.rp2_beaching.mass.total_volume_liters }}liters  
