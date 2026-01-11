@@ -35,6 +35,7 @@ import os
 filepath = sys.argv[-3]
 output_dir = sys.argv[-2]
 base_name = sys.argv[-1]
+background = '#C6D2FF'
 
 print(f"Opening {filepath}...")
 doc = FreeCAD.openDocument(filepath)
@@ -73,7 +74,7 @@ for view_name, view_method in views:
     # Export as PNG 
     clean_name = base_name.replace('.color', '')
     output_path = os.path.join(output_dir, f"{clean_name}.render.{view_name}.png")
-    view.saveImage(output_path, 1920, 1080, 'White')
+    view.saveImage(output_path, 1920, 1080, background)
     
     print(f"  Saved: {output_path}")
 

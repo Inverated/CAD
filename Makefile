@@ -366,7 +366,7 @@ render-only: $(COLOR_ARTIFACT) $(RENDER_DIR)
 	@if command -v convert >/dev/null 2>&1; then \
 		for img in $(ARTIFACTS_DIR)/*.png; do \
 			if [ -f "$$img" ]; then \
-				convert "$$img" -fuzz 1% -trim +repage -bordercolor white -border 20 "$$img" || true; \
+				convert "$$img" -fuzz 1% -trim +repage -bordercolor \#C6D2FF -border 30 "$$img" || true; \
 			fi \
 		done; \
 		echo "Cropping complete!"; \

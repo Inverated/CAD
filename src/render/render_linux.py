@@ -15,7 +15,7 @@ except ImportError:
     print("ERROR: This script must be run with freecadcmd or FreeCAD")
     sys.exit(1)
 
-def export_renders(fcstd_path, output_render):
+def export_renders(fcstd_path, output_render, background='#C6D2FF'):
     """Export multiple views from an FCStd file as PNG images"""
     
     if not os.path.exists(fcstd_path):
@@ -121,7 +121,7 @@ def export_renders(fcstd_path, output_render):
         # Export as PNG
         clean_name = base_name.replace('.color', '')
         output_path = os.path.join(output_render, f"{clean_name}.render.{view_name}.png")
-        view.saveImage(output_path, 1920, 1080, 'White')
+        view.saveImage(output_path, 1920, 1080, background)
         
         # Crop white borders using ImageMagick (more robust than PIL)
         try:
@@ -164,6 +164,7 @@ if __name__ == "__main__":
     # Get arguments from environment variables (passed by Makefile)
     fcstd_path = os.environ.get('FCSTD_FILE')
     render_dir = os.environ.get('IMAGE_DIR')
+    background = os.environ.get('BACKGROUND_COLOR', '#C6D2FF')
     
     if not fcstd_path or not render_dir:
         print("ERROR: FCSTD_FILE and RENDER_DIR environment variables must be set")
@@ -174,7 +175,7 @@ if __name__ == "__main__":
     print(f"Input file: {fcstd_path}")
     print(f"Output dir: {render_dir}")
     
-    success = export_renders(fcstd_path, render_dir)
+    success = export_renders(fcstd_path, render_dir, background)
     
     # Exit cleanly
     import os as _os
