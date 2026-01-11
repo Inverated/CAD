@@ -97,7 +97,7 @@ All vessel designs are created using **parametric CAD modeling in FreeCAD and Py
 - Rapid design iteration and optimization, version control and design transparency
 - Open-source accessibility for educational purposes
 
-**[Explore the CAD Models →]({{ '/technical.html' | relative_url }})**
+**[Explore the CAD Models →]({{ '/downloads' | relative_url }})**
 
 ---
 

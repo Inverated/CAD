@@ -1,5 +1,5 @@
 {
-  "boat_description": "Base parameters for RP2 - only independent values",
+  "boat_description": "Base parameters for RP2",
   "boat_name": "rp2",
   
   "panels_longitudinal": 6,

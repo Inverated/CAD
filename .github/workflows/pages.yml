@@ -68,10 +68,6 @@ jobs:
         run: |
           make design-all
 
-      - name: Generate parameters for all configurations
-        run: |
-          make parameters-all
-
       - name: Validate all configurations
         run: |
           make validate-all
