@@ -49,7 +49,7 @@ def central(vessel, params):
     overhead.Shape = overhead.Shape.cut(cockpit_cutter_transformed)
 
     # bottom: part of the hull below the sole
-    bottom = vessel.newObject("Part::Feature", "Bottom (fiberglass)")
+    bottom = vessel.newObject("Part::Feature", "Bottom (fiberglass_bottom)")
     # Create the flat bottom cylinder to cut from bottom
     bottom_cylinder = elliptical_cylinder(params['vaka_length'] + 5,
                                           params['vaka_width'] + 5,

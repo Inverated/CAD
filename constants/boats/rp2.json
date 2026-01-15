@@ -26,6 +26,9 @@
   
   "aka_cap_thickness": 5,
   "aka_cap_diameter": 170,
+
+  "akas_per_panel": 2,
+  "aka_rim": 400,
   
   "vaka_length": 9000,
   "vaka_width": 1150,

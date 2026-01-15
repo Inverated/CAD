@@ -187,14 +187,17 @@ rig_kuning.Placement = FreeCAD.Placement(
 
 # rudder_biru with rudder_rotation_biru
 
+# Calculate last aka Y position for rudder placement
+last_panel_index = params['panels_longitudinal'] // 2 - 1
+last_aka_index = params['akas_per_panel'] - 1
+last_aka_y = aka_y_position(params, last_panel_index, last_aka_index)
+
 rudder_biru = doc.addObject("App::Part", "Rudder Biru")
 rudder(rudder_biru, params, params['rudder_raised_biru'])
 rudder_biru.Placement = FreeCAD.Placement(
     Base.Vector(params['vaka_x_offset'] - params['vaka_width'] / 2
                 - params['rudder_distance_from_vaka'],
-                params['cockpit_length'] / 2
-                + (params['panels_longitudinal'] / 2 - 1) * params['panel_width']
-                + params['aka_width'] / 2,
+                last_aka_y,
                 0),
     FreeCAD.Rotation(Base.Vector(0, 0, 1), params['rudder_rotation_biru']))
 
@@ -205,9 +208,7 @@ rudder(rudder_kuning, params, params['rudder_raised_kuning'])
 rudder_kuning.Placement = FreeCAD.Placement(
     Base.Vector(params['vaka_x_offset'] - params['vaka_width'] / 2
                 - params['rudder_distance_from_vaka'],
-                - params['cockpit_length'] / 2
-                - (params['panels_longitudinal'] / 2 - 1) * params['panel_width']
-                - params['aka_width'] / 2,
+                - last_aka_y,
                 0),
     FreeCAD.Rotation(Base.Vector(0, 0, 1), params['rudder_rotation_kuning']))
 

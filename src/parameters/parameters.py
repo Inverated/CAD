@@ -39,9 +39,15 @@ def compute_derived(base: Dict[str, Any]) -> Dict[str, Any]:
                                   (base['deck_width'] - base['vaka_width']) / 2 +
                                   params['stringer_width'])
     
-    # Cockpit length
-    params['cockpit_length'] = (base['panel_width'] + base['crossdeck_width'] - 
-                                base['aka_width'])
+    # Cockpit length: distance from center to first aka's inner edge, doubled
+    # First aka Y position depends on akas_per_panel:
+    # - Single aka: centered in panel at crossdeck_width/2 + panel_width/2
+    # - Multiple akas: at rim distance from panel edge at crossdeck_width/2 + aka_rim
+    if base.get('akas_per_panel', 1) == 1:
+        first_aka_y = base['crossdeck_width'] / 2 + base['panel_width'] / 2
+    else:
+        first_aka_y = base['crossdeck_width'] / 2 + base['aka_rim']
+    params['cockpit_length'] = 2 * first_aka_y - base['aka_width']
     
     # Panel stringer calculations
     params['panel_stringer_offset'] = (base['panel_length'] / 4 - 
@@ -77,10 +83,24 @@ def compute_derived(base: Dict[str, Any]) -> Dict[str, Any]:
     params['pillar_width'] = base['aka_width']
     params['pillar_height'] = params['spine_base_level'] - base['ama_thickness']
     
-    # Ama cone length
-    params['ama_cone_length'] = ((base['ama_length'] -
-                                  (base['panel_width'] * (base['panels_longitudinal'] - 1) +
-                                   params['pillar_width'] + base['crossdeck_width'])) / 2)
+    # Ama cone length: cone starts at outer edge of outermost pillar
+    # Calculate Y position of the outermost (last) aka
+    last_panel_index = base['panels_longitudinal'] // 2 - 1
+    last_aka_index = base.get('akas_per_panel', 1) - 1
+    if base.get('akas_per_panel', 1) == 1:
+        last_aka_y = (base['crossdeck_width'] / 2
+                      + last_panel_index * base['panel_width']
+                      + base['panel_width'] / 2)
+    else:
+        aka_spacing = ((base['panel_width'] - 2 * base['aka_rim'])
+                       / (base['akas_per_panel'] - 1))
+        last_aka_y = (base['crossdeck_width'] / 2
+                      + last_panel_index * base['panel_width']
+                      + base['aka_rim'] + last_aka_index * aka_spacing)
+    # Outer edge of outermost pillar
+    outer_pillar_edge_y = last_aka_y + params['pillar_width'] / 2
+    # Cone length = (ama_length - cylinder_length) / 2
+    params['ama_cone_length'] = (base['ama_length'] / 2 - outer_pillar_edge_y)
     
     # Vaka x offset (distance from ama centerline to vaka centerline)
     params['vaka_x_offset'] = (- params['pillar_width'] / 2

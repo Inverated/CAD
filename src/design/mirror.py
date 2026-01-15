@@ -7,154 +7,174 @@ import math
 
 from shapes import *
 
+def aka_y_position(params, panel_index, aka_index):
+    """Calculate the Y position for an aka within a panel.
+
+    Similar to rudder rib positioning with rim and spacing:
+    - Single aka (akas_per_panel == 1): centered in panel
+    - Multiple akas: evenly spaced from rim to panel_width - rim
+    """
+    akas_per_panel = params['akas_per_panel']
+    panel_start_y = (params['crossdeck_width'] / 2
+                     + panel_index * params['panel_width'])
+
+    if akas_per_panel == 1:
+        # Center of panel (maintains backward compatibility)
+        return panel_start_y + params['panel_width'] / 2
+    else:
+        # Evenly spaced with rim margin (like rudder ribs)
+        aka_spacing = ((params['panel_width'] - 2 * params['aka_rim'])
+                       / (akas_per_panel - 1))
+        return panel_start_y + params['aka_rim'] + aka_index * aka_spacing
+
 def mirror(side, params):
     # akas (cross-beams) and pillars under each transversal row of panels
+    # With akas_per_panel > 1, create multiple akas per panel row
+
+    aka_counter = 0  # global counter for naming
 
     for i in range(0, params['panels_longitudinal'] // 2):
-        aka = side.newObject("Part::Feature", f"Aka_{i} (aluminum)")
-        aka.Shape = rectangular_tube_capped(
-            params['aka_height'],
-            params['aka_width'],
-            params['aka_thickness'],
-            params['aka_length'],
-            params['aka_cap_diameter'],
-            params['aka_cap_thickness'])
-        aka.Placement = FreeCAD.Placement(
-            Base.Vector(params['aka_length'] - params['pillar_width'] / 2,
-                        params['panel_width'] * i
-                        + params['crossdeck_width'] / 2
-                        + params['panel_width'] / 2
-                        - params['aka_width'] / 2,
-                        params['aka_base_level']),
-            FreeCAD.Rotation(Base.Vector(0, -1, 0), 90))
+        for j in range(0, params['akas_per_panel']):
+            aka_y = aka_y_position(params, i, j)
 
-        stanchion = side.newObject("Part::Feature",
-                                   f"Stanchion_{i} (steel)")
-        stanchion.Shape = pipe(params['stanchion_diameter'],
-                               params['stanchion_thickness'],
-                               params['stanchion_length'])
-        stanchion.Placement = FreeCAD.Placement(
-            Base.Vector(params['aka_length']
-                        - params['pillar_width'] / 2
-                        - params['aka_width'] / 2,
-                        params['panel_width'] * i
-                        + params['crossdeck_width'] / 2
-                        + params['panel_width'] / 2,
-                        params['aka_base_level']),
-            FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-        
-        pillar = side.newObject("Part::Feature", f"Pillar_{i} (aluminum)")
-        pillar.Shape = shs(params['pillar_width'],
-                           params['pillar_thickness'],
-                           params['pillar_height'])
-        pillar.Placement = FreeCAD.Placement(
-            Base.Vector(- params['pillar_width'] / 2,
-                        params['panel_width'] * i
-                        + params['crossdeck_width'] / 2
-                        + params['panel_width'] / 2
-                        - params['aka_width'] / 2,
-                        params['ama_thickness']),
-            FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
-        
-        # Pillar-to-aka diagonal braces (one on each side) at 45 degrees
+            aka = side.newObject("Part::Feature", f"Aka_{aka_counter} (aluminum)")
+            aka.Shape = rectangular_tube_capped(
+                params['aka_height'],
+                params['aka_width'],
+                params['aka_thickness'],
+                params['aka_length'],
+                params['aka_cap_diameter'],
+                params['aka_cap_thickness'])
+            aka.Placement = FreeCAD.Placement(
+                Base.Vector(params['aka_length'] - params['pillar_width'] / 2,
+                            aka_y - params['aka_width'] / 2,
+                            params['aka_base_level']),
+                FreeCAD.Rotation(Base.Vector(0, -1, 0), 90))
 
-        pillar_x = - params['pillar_width'] / 2
-        
-        # Y position of this pillar center
-        pillar_y_kuning = (params['panel_width'] * i
-                           + params['crossdeck_width'] / 2
-                           + params['panel_width'] / 2
-                           - params['aka_width'] / 2
-                           - params['stringer_width'])
-        
-        # Lower attachment point on pillar
-        pillar_z_lower = (params['aka_base_level']
-                          - params['pillar_brace_vertical_offset'])
-        
-        # Brace length (diagonal at 45°)
-        brace_length = math.sqrt(2) * (params['pillar_brace_vertical_offset']
-                                       + params['spine_width'])
-  
-        # Kuning brace
-        point_lower_kuning = Base.Vector(pillar_x,
-                                         pillar_y_kuning,
-                                         pillar_z_lower)
-        brace_kuning = side.newObject("Part::Feature",
-                                      f"Pillar_Brace_Kuning_{i} (aluminum)")
-        brace_kuning.Shape = shs(params['stringer_width'],
-                                 params['stringer_thickness'],
-                                 brace_length)
-        brace_kuning.Placement = FreeCAD.Placement(
-            point_lower_kuning,
-            FreeCAD.Rotation(Base.Vector(0, 1, 0), 45))
+            stanchion = side.newObject("Part::Feature",
+                                       f"Stanchion_{aka_counter} (steel)")
+            stanchion.Shape = pipe(params['stanchion_diameter'],
+                                   params['stanchion_thickness'],
+                                   params['stanchion_length'])
+            stanchion.Placement = FreeCAD.Placement(
+                Base.Vector(params['aka_length']
+                            - params['pillar_width'] / 2
+                            - params['aka_width'] / 2,
+                            aka_y,
+                            params['aka_base_level']),
+                FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
 
-        # Biru brace
-        point_lower_biru = Base.Vector(pillar_x,
-                                       pillar_y_kuning
-                                       + params['pillar_width']
-                                       + params['stringer_width'],
-                                       pillar_z_lower)
-        brace_biru = side.newObject("Part::Feature",
-                                    f"Pillar_Brace_Biru_{i} (aluminum)")
-        brace_biru.Shape = shs(params['stringer_width'],
-                               params['stringer_thickness'],
-                               brace_length)
-        brace_biru.Placement = FreeCAD.Placement(
-            point_lower_biru,
-            FreeCAD.Rotation(Base.Vector(0, 1, 0), 45))
+            pillar = side.newObject("Part::Feature", f"Pillar_{aka_counter} (aluminum)")
+            pillar.Shape = shs(params['pillar_width'],
+                               params['pillar_thickness'],
+                               params['pillar_height'])
+            pillar.Placement = FreeCAD.Placement(
+                Base.Vector(- params['pillar_width'] / 2,
+                            aka_y - params['aka_width'] / 2,
+                            params['ama_thickness']),
+                FreeCAD.Rotation(Base.Vector(0, 0, 0), 0))
+
+            # Pillar-to-aka diagonal braces (one on each side) at 45 degrees
+
+            pillar_x = - params['pillar_width'] / 2
+
+            # Y position of this pillar center
+            pillar_y_kuning = aka_y - params['aka_width'] / 2 - params['stringer_width']
+
+            # Lower attachment point on pillar
+            pillar_z_lower = (params['aka_base_level']
+                              - params['pillar_brace_vertical_offset'])
+
+            # Brace length (diagonal at 45°)
+            brace_length = math.sqrt(2) * (params['pillar_brace_vertical_offset']
+                                           + params['spine_width'])
+
+            # Kuning brace
+            point_lower_kuning = Base.Vector(pillar_x,
+                                             pillar_y_kuning,
+                                             pillar_z_lower)
+            brace_kuning = side.newObject("Part::Feature",
+                                          f"Pillar_Brace_Kuning_{aka_counter} (aluminum)")
+            brace_kuning.Shape = shs(params['stringer_width'],
+                                     params['stringer_thickness'],
+                                     brace_length)
+            brace_kuning.Placement = FreeCAD.Placement(
+                point_lower_kuning,
+                FreeCAD.Rotation(Base.Vector(0, 1, 0), 45))
+
+            # Biru brace
+            point_lower_biru = Base.Vector(pillar_x,
+                                           pillar_y_kuning
+                                           + params['pillar_width']
+                                           + params['stringer_width'],
+                                           pillar_z_lower)
+            brace_biru = side.newObject("Part::Feature",
+                                        f"Pillar_Brace_Biru_{aka_counter} (aluminum)")
+            brace_biru.Shape = shs(params['stringer_width'],
+                                   params['stringer_thickness'],
+                                   brace_length)
+            brace_biru.Placement = FreeCAD.Placement(
+                point_lower_biru,
+                FreeCAD.Rotation(Base.Vector(0, 1, 0), 45))
+
+            aka_counter += 1
 
     # Cross-bracing between neighboring pillars (X-shaped)
-    # Add bracing between each pair of adjacent pillars
+    # Add bracing between each pair of adjacent akas
 
-    for i in range(0, params['panels_longitudinal'] // 2 - 1):
-        # Y positions of the two neighboring pillars  
-        y1 = (params['panel_width'] * i
-              + params['crossdeck_width'] / 2
-              + params['panel_width'] / 2)
-        y2 = (params['panel_width'] * (i + 1)
-              + params['crossdeck_width'] / 2
-              + params['panel_width'] / 2)
-        
+    # Build list of all aka Y positions
+    aka_y_positions = []
+    for i in range(0, params['panels_longitudinal'] // 2):
+        for j in range(0, params['akas_per_panel']):
+            aka_y_positions.append(aka_y_position(params, i, j))
+
+    total_akas = len(aka_y_positions)
+
+    for i in range(0, total_akas - 1):
+        # Y positions of the two neighboring pillars
+        y1 = aka_y_positions[i]
+        y2 = aka_y_positions[i + 1]
+
         # X position at center of pillars
         x_pillar = - params['pillar_width'] / 2
-        
+
         # Upper corners (near spine)
         z_upper = params['spine_base_level'] - params['brace_upper_offset']
-        
+
         # Lower corners (near ama)
         z_lower = params['ama_thickness'] + params['brace_lower_offset']
-        
+
         # First diagonal of X: from (y1, upper) to (y2, lower)
         brace_1 = side.newObject("Part::Feature", f"Cross_Brace_1_{i} (aluminum)")
         point1 = Base.Vector(x_pillar, y1, z_upper)
         point2 = Base.Vector(x_pillar, y2, z_lower)
         length1 = point1.distanceToPoint(point2)
-        
+
         brace_1.Shape = Part.makeCylinder(params['brace_diameter'] / 2, length1)
-        
+
         # Calculate rotation to align with diagonal
         direction = point2.sub(point1)
         direction.normalize()
-        
+
         z_axis = Base.Vector(0, 0, 1)
         rotation_axis = z_axis.cross(direction)
         rotation_angle = math.degrees(math.acos(z_axis.dot(direction)))
         brace_1.Placement = FreeCAD.Placement(
             point1,
             FreeCAD.Rotation(rotation_axis, rotation_angle))
-        
+
         # Second diagonal of X: from (y1, lower) to (y2, upper)
         brace_2 = side.newObject("Part::Feature",
                                  f"Cross_Brace_2_{i} (aluminum)")
         point3 = Base.Vector(x_pillar, y1, z_lower)
         point4 = Base.Vector(x_pillar, y2, z_upper)
         length2 = point3.distanceToPoint(point4)
-        
+
         brace_2.Shape = Part.makeCylinder(params['brace_diameter'] / 2, length2)
-        
+
         direction2 = point4.sub(point3)
         direction2.normalize()
-        
+
         rotation_axis2 = z_axis.cross(direction2)
         rotation_angle2 = math.degrees(math.acos(z_axis.dot(direction2)))
         brace_2.Placement = FreeCAD.Placement(
@@ -244,7 +264,7 @@ def mirror(side, params):
 
     for i in range(0, params['panels_longitudinal'] // 2):
         for j in range(0, params['panels_transversal']):
-            panel = side.newObject("Part::Feature", f"Panel_{i}_{j} (solar)")
+            panel = side.newObject("Part::Feature", f"Panel_{i}_{j} ({'solar' if (i + j) % 2 == 0 else 'solar_dark'})")
             panel.Shape = Part.makeBox(params['panel_length'],
                                        params['panel_width'],
                                        params['panel_height'])
@@ -273,6 +293,11 @@ def mirror(side, params):
                         params['stringer_base_level']),
             FreeCAD.Rotation(Base.Vector(1, 0, 0), 90))
 
+    # Y position of the last (most aft) aka - used for rudder mount
+    last_panel_index = params['panels_longitudinal'] // 2 - 1
+    last_aka_index = params['akas_per_panel'] - 1
+    last_aka_y = aka_y_position(params, last_panel_index, last_aka_index)
+
     # cylinder to cut rudder cap hole into deck
     deck_cutter = Part.makeCylinder(
         params['rudder_aka_mount_pin_length'] / 2 + 12,
@@ -281,9 +306,7 @@ def mirror(side, params):
         params['vaka_x_offset']
         - params['vaka_width'] / 2
         - params['rudder_distance_from_vaka'],
-        params['cockpit_length'] / 2
-        + (params['panels_longitudinal'] / 2 - 1) * params['panel_width']
-        + params['aka_width'] / 2,
+        last_aka_y,
         params['gunwale_base_level']))
         
     # deck
@@ -368,10 +391,7 @@ def mirror(side, params):
         params['vaka_x_offset']
         - params['vaka_width'] / 2
         - params['rudder_distance_from_vaka'],
-        params['cockpit_length'] / 2
-        + (params['panels_longitudinal'] / 2 - 1)
-        * params['panel_width']
-        + params['aka_width'] / 2,
+        last_aka_y,
         params['rudder_vaka_mount_base_level']))
     rudder_vaka_mount_a_shape = rudder_vaka_mount_a_shape.cut(hull_cylinder)
     rudder_vaka_mount_a.Shape = rudder_vaka_mount_a_shape
@@ -447,10 +467,8 @@ def mirror(side, params):
         params['vaka_x_offset']
         - params['vaka_width'] / 2
         - params['rudder_distance_from_vaka'],
-        params['cockpit_length'] / 2
-        + (params['panels_longitudinal'] / 2 - 1) * params['panel_width']
-                    + params['aka_width'] / 2,
-                    params['rudder_vaka_mount_base_level']))
+        last_aka_y,
+        params['rudder_vaka_mount_base_level']))
     rudder_vaka_mount_b_shape = rudder_vaka_mount_b_shape.cut(hull_cylinder)
     rudder_vaka_mount_b.Shape = rudder_vaka_mount_b_shape
 
@@ -531,7 +549,7 @@ def mirror(side, params):
                     params['ama_diameter'] / 2),
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 90))
 
-    ama_body_lower = side.newObject("Part::Feature", "Ama pipe lower (pvc)")
+    ama_body_lower = side.newObject("Part::Feature", "Ama pipe lower (pvc_bottom)")
     ama_body_lower.Shape = pipe(params['ama_diameter'],
                                 params['ama_thickness'],
                                 params['ama_length'] / 2 - params['ama_cone_length'])
@@ -563,7 +581,7 @@ def mirror(side, params):
                     params['ama_diameter'] / 2),
         FreeCAD.Rotation(Base.Vector(1, 0, 0), 270))
 
-    ama_cone_lower = side.newObject("Part::Feature", "Ama_Cone_Lower (pvc)")
+    ama_cone_lower = side.newObject("Part::Feature", "Ama_Cone_Lower (pvc_bottom)")
     ama_cone_lower.Shape = hollow_cone(params['ama_diameter'],
                                        params['ama_thickness'],
                                        params['ama_cone_length'])
