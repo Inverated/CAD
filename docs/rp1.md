@@ -127,7 +127,7 @@ Access CAD models for all sail configurations in FreeCAD (.FCStd) and STEP (.ste
 These files include the complete 3D geometry and can be modified for your specific requirements.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1em; margin: 2em 0;">
-{% for config in site.data.rp1_downloads.configurations %}
+{% for config in site.data.rp1_downloads.configuration %}
   <div style="padding: 1em; border: 1px solid #ddd; border-radius: 4px;">
     <div style="font-weight: bold; margin-bottom: 0.5em; text-transform: capitalize;">
       {{ config.name | replace: "_", " " }}
