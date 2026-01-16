@@ -77,7 +77,7 @@ jobs:
           mkdir -p docs/_data
           # Copy JSON files and rename with Jekyll-friendly names (dots to underscores)
           count=0
-          for file in artifacts/*.json; do
+          for file in artifact/*.json; do
             if [ -f "$file" ]; then
               basename=$(basename "$file" .json)
               # Convert rp2.closehaul to rp2_closehaul for Jekyll
@@ -96,30 +96,30 @@ jobs:
       - name: Copy renders to docs/renders folder
         run: |
           mkdir -p docs/renders
-          if ls artifacts/*.png 1> /dev/null 2>&1; then
-            cp artifacts/*.png docs/renders/
-            echo "Copied $(ls artifacts/*.png | wc -l) render files"
+          if ls artifact/*.png 1> /dev/null 2>&1; then
+            cp artifact/*.png docs/renders/
+            echo "Copied $(ls artifact/*.png | wc -l) render files"
           else
-            echo "WARNING: No render PNG files found in artifacts/"
+            echo "WARNING: No render PNG files found in artifact/"
           fi
       
       - name: Copy FCStd models to docs/downloads folder
         run: |
           mkdir -p docs/downloads
-          if ls artifacts/*.FCStd 1> /dev/null 2>&1; then
-            cp artifacts/*.FCStd docs/downloads/
-            echo "Copied $(ls artifacts/*.FCStd | wc -l) FCStd files"
+          if ls artifact/*.FCStd 1> /dev/null 2>&1; then
+            cp artifact/*.FCStd docs/downloads/
+            echo "Copied $(ls artifact/*.FCStd | wc -l) FCStd files"
           else
-            echo "WARNING: No FCStd files found in artifacts/"
+            echo "WARNING: No FCStd files found in artifact/"
           fi
 
       - name: Copy STEP models to docs/downloads folder
         run: |
-          if ls artifacts/*.step.step 1> /dev/null 2>&1; then
-            cp artifacts/*.step.step docs/downloads/
-            echo "Copied $(ls artifacts/*.step.step | wc -l) STEP files"
+          if ls artifact/*.step.step 1> /dev/null 2>&1; then
+            cp artifact/*.step.step docs/downloads/
+            echo "Copied $(ls artifact/*.step.step | wc -l) STEP files"
           else
-            echo "WARNING: No STEP files found in artifacts/"
+            echo "WARNING: No STEP files found in artifact/"
           fi
       
       - name: Verify files before Jekyll build
