@@ -64,21 +64,21 @@ title: Roti Proa II - 9m Day Tourism Vessel
 ## Buoyancy analysis
 
 We derive the following buoyancy characteristics from
-our automated analysis using Newton's method of iterating the
-roll/pitch/z-offset of the boat based on the computed center of
-buoyancy. The numbers indicate the equilibrium achieved after 
-{{ site.data.rp2_beaching_buoyancy.equilibrium.iterations }} iterations,
+our automated analysis using Newton's method, iteratively adjusting the
+roll/pitch/z-offset of the boat according to the difference between the center/amount of buoyancy and the center/amount of mass. The numbers indicate the equilibrium achieved after 
+{{ site.data.rp2_beaching_buoyancy.equilibrium.iterations }} iterations using
+the beaching configuration (no sails and rudders lifted),
 see [implementation](https://github.com/solar-proa/CAD/blob/main/src/buoyancy/__main__.py).
 
 **Z-offset (boat lowering into the water):** {{ site.data.rp2_beaching_buoyancy.equilibrium.z_offset_mm }} mm  
-**Pitch degrees:** {{ site.data.rp2_beaching_buoyancy.equilibrium.pitch_deg }} arc degrees
-**Roll degrees:** {{ site.data.rp2_beaching_buoyancy.equilibrium.roll_deg }} arc degrees
-**Vaka submerged volume:** {{ site.data.rp2_beaching_buoyancy.vaka.submerged_volume_liters }} liters
-**Vaka z-offset:** {{ site.data.rp2_beaching_buoyancy.vaka.z_world_mm }} mm
-**Ama submerged volume:** {{ site.data.rp2_beaching_buoyancy.ama.submerged_volume_liters }} liters
-**Ama z-offset:** {{ site.data.rp2_beaching_buoyancy.ama.z_world_mm }} mm
-**Center of gravity (world-coordinates x, y, z):** {{ site.data.rp2_beaching_buoyancy.center_of_buoyancyy_world.x }}, {{ site.data.rp2_beaching_buoyancy.center_of_gravity_world.y }}, {{ site.data.rp2_beaching_buoyancy.center_of_gravity_world.z }} mm
-**Center of buoyancy (world-coordinates x, y, z):** {{ site.data.rp2_beaching_buoyancy.center_of_buoyancy.x }}, {{ site.data.rp2_beaching_buoyancy.center_of_buoyancy.y }}, {{ site.data.rp2_beaching_buoyancy.center_of_buoyancy.z }} mm
+**Pitch degrees:** {{ site.data.rp2_beaching_buoyancy.equilibrium.pitch_deg }} arc degrees  
+**Roll degrees:** {{ site.data.rp2_beaching_buoyancy.equilibrium.roll_deg }} arc degrees  
+**Vaka submerged volume:** {{ site.data.rp2_beaching_buoyancy.vaka.submerged_volume_liters }} liters  
+**Vaka z-offset:** {{ site.data.rp2_beaching_buoyancy.vaka.z_world_mm }} mm  
+**Ama submerged volume:** {{ site.data.rp2_beaching_buoyancy.ama.submerged_volume_liters }} liters  
+**Ama z-offset:** {{ site.data.rp2_beaching_buoyancy.ama.z_world_mm }} mm  
+**Center of gravity (world-coordinates x, y, z):** {{ site.data.rp2_beaching_buoyancy.center_of_gravity_world.x }}, {{ site.data.rp2_beaching_buoyancy.center_of_gravity_world.y }}, {{ site.data.rp2_beaching_buoyancy.center_of_gravity_world.z }} mm  
+**Center of buoyancy (world-coordinates x, y, z):** {{ site.data.rp2_beaching_buoyancy.center_of_buoyancy.x }}, {{ site.data.rp2_beaching_buoyancy.center_of_buoyancy.y }}, {{ site.data.rp2_beaching_buoyancy.center_of_buoyancy.z }} mm  
 
 ---
 
