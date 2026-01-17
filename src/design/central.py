@@ -98,6 +98,22 @@ def central(vessel, params):
         Base.Vector(params['vaka_x_offset'], 0, params['bottom_height']),
         FreeCAD.Rotation(Base.Vector(0, 0, 1), 90))
 
+    # air_inside_vaka: trapped air volume inside cabin (for buoyancy calculation)
+    # This represents the air from sole top to overhead bottom, including cockpit
+    air_inside_height = (params['overhead_base_level']
+                         - params['bottom_height']
+                         - params['sole_thickness'])
+    air_inside_vaka = vessel.newObject("Part::Feature", "Air_Inside_Vaka (air)")
+    air_inside_vaka.Shape = elliptical_cylinder(
+        params['vaka_length'] - 2 * params['vaka_thickness'],
+        params['vaka_width'] - 2 * params['vaka_thickness'],
+        air_inside_height)
+    air_inside_vaka.Placement = FreeCAD.Placement(
+        Base.Vector(params['vaka_x_offset'],
+                    0,
+                    params['bottom_height'] + params['sole_thickness']),
+        FreeCAD.Rotation(Base.Vector(0, 0, 1), 90))
+
     gunwale = vessel.newObject("Part::Feature", "Gunwale (wood)")
     gunwale.Shape = elliptical_pipe(params['vaka_length'],
                                     params['vaka_width'],

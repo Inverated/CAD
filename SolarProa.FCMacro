@@ -44,8 +44,8 @@ repo_root = macro_dir
 print(f"Repository root: {repo_root}")
 
 # Find available boats and configurations
-boats_dir = os.path.join(repo_root, 'constants', 'boats')
-configs_dir = os.path.join(repo_root, 'constants', 'configurations')
+boats_dir = os.path.join(repo_root, 'constant', 'boat')
+configs_dir = os.path.join(repo_root, 'constant', 'configuration')
 
 boats = sorted([f.replace('.json', '') for f in os.listdir(boats_dir) if f.endswith('.json')])
 configurations = sorted([f.replace('.json', '') for f in os.listdir(configs_dir) if f.endswith('.json')])
@@ -55,8 +55,8 @@ print(f"Available configurations: {configurations}")
 
 
 def load_parameters(boat, configuration):
-    """Load computed parameters from artifacts (includes derived values like vaka_x_offset)"""
-    params_file = os.path.join(repo_root, 'artifacts', f'{boat}.{configuration}.parameter.json')
+    """Load computed parameters from artifact (includes derived values like vaka_x_offset)"""
+    params_file = os.path.join(repo_root, 'artifact', f'{boat}.{configuration}.parameter.json')
 
     if os.path.exists(params_file):
         with open(params_file, 'r') as f:
@@ -67,11 +67,11 @@ def load_parameters(boat, configuration):
         print("  Using base parameters (some values may be incorrect)")
         params = {}
 
-        boat_file = os.path.join(repo_root, 'constants', 'boats', f'{boat}.json')
+        boat_file = os.path.join(repo_root, 'constant', 'boat', f'{boat}.json')
         with open(boat_file, 'r') as f:
             params.update(json.load(f))
 
-        config_file = os.path.join(repo_root, 'constants', 'configurations', f'{configuration}.json')
+        config_file = os.path.join(repo_root, 'constant', 'configuration', f'{configuration}.json')
         with open(config_file, 'r') as f:
             params.update(json.load(f))
 
@@ -460,7 +460,7 @@ class DesignViewDialog(QtGui.QDialog):
 
         if result.returncode == 0:
             # Look for the COLORED design file
-            design_file = os.path.join(repo_root, 'artifacts', f'{boat}.{configuration}.color.FCStd')
+            design_file = os.path.join(repo_root, 'artifact', f'{boat}.{configuration}.color.FCStd')
 
             if os.path.exists(design_file):
                 print(f"\n✓ Colored design complete!")

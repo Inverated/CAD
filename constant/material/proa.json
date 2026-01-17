@@ -83,6 +83,14 @@
       "density_kg_m3": 60,
       "description": "Flotation foam"
     },
+    "air": {
+      "name": "Air",
+      "color": [0.9, 0.95, 1.0],
+      "transparency": 0.9,
+      "display_mode": "Shaded",
+      "density_kg_m3": 1.2,
+      "description": "Trapped air volume (for buoyancy calculation)"
+    },
     "solar": {
       "name": "Solar panels",
       "color": [0.3, 0.3, 0.3],

@@ -339,3 +339,33 @@ $(STEP_ARTIFACT): $(DESIGN_ARTIFACT) $(STEP_SOURCE) | $(ARTIFACT_DIR)
 .PHONY: step
 step: $(STEP_ARTIFACT)
 	@echo "✓ STEP export complete for $(BOAT).$(CONFIGURATION)"
+
+# ==============================================================================
+# BUOYANCY EQUILIBRIUM ANALYSIS
+# ==============================================================================
+
+BUOYANCY_DIR := $(SRC_DIR)/buoyancy
+BUOYANCY_SOURCE := $(wildcard $(BUOYANCY_DIR)/*.py) $(wildcard $(SRC_DIR)/physics/*.py)
+BUOYANCY_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).$(CONFIGURATION).buoyancy.json
+
+$(BUOYANCY_ARTIFACT): $(DESIGN_ARTIFACT) $(MASS_ARTIFACT) $(MATERIAL_FILE) $(BUOYANCY_SOURCE) | $(ARTIFACT_DIR)
+	@echo "Running buoyancy analysis: $(BOAT).$(CONFIGURATION)"
+	@if [ "$(UNAME)" = "Darwin" ]; then \
+		PYTHONPATH=$(FREECAD_BUNDLE)/Contents/Resources/lib:$(FREECAD_BUNDLE)/Contents/Resources/Mod:$(PWD) \
+		DYLD_LIBRARY_PATH=$(FREECAD_BUNDLE)/Contents/Frameworks:$(FREECAD_BUNDLE)/Contents/Resources/lib \
+		$(FREECAD_PYTHON) -m src.buoyancy \
+			--design $(DESIGN_ARTIFACT) \
+			--mass $(MASS_ARTIFACT) \
+			--materials $(MATERIAL_FILE) \
+			--output $@; \
+	else \
+		PYTHONPATH=$(PWD) $(FREECAD_PYTHON) -m src.buoyancy \
+			--design $(DESIGN_ARTIFACT) \
+			--mass $(MASS_ARTIFACT) \
+			--materials $(MATERIAL_FILE) \
+			--output $@; \
+	fi
+
+.PHONY: buoyancy
+buoyancy: $(BUOYANCY_ARTIFACT)
+	@echo "✓ Buoyancy analysis complete for $(BOAT).$(CONFIGURATION)"

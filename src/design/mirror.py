@@ -595,7 +595,7 @@ def mirror(side, params):
     ama_cone_foam = side.newObject("Part::Feature", "Ama_Cone_Foam (foam)")
     ama_cone_foam.Shape = Part.makeCone(params['ama_diameter'] / 2 - params['ama_thickness'],
                                         0,
-                                        params['ama_thickness'])
+                                        params['ama_cone_length'])
     ama_cone_foam.Placement = FreeCAD.Placement(
         Base.Vector(0,
                     params['ama_length'] / 2 - params['ama_cone_length'],
