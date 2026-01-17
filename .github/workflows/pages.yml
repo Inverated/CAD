@@ -80,9 +80,13 @@ jobs:
         run: |
           python3 docs/generate_dependency_graph.py
 
-      - name: Copy data files to docs folder
+      - name: Copy constant files to docs/_data
         run: |
           mkdir -p docs/_data
+          cp constant/view.json docs/_data/
+
+      - name: Copy artifact data files to docs folder
+        run: |
           # Copy JSON files and rename with Jekyll-friendly names (dots to underscores)
           count=0
           for file in artifact/*.json; do

@@ -32,11 +32,13 @@ import FreeCAD
 import FreeCADGui
 import sys
 import os
+import json
 
 # Get arguments
-filepath = sys.argv[-3]
-output_dir = sys.argv[-2]
-base_name = sys.argv[-1]
+filepath = sys.argv[-4]
+output_dir = sys.argv[-3]
+base_name = sys.argv[-2]
+views_path = sys.argv[-1]
 background = '#C6D2FF'
 
 print(f"Opening {filepath}...")
@@ -46,13 +48,17 @@ doc = FreeCAD.openDocument(filepath)
 # The input FCStd file is expected to be a *.color.FCStd file
 doc.recompute()
 
-# Define views to export
-views = [
-    ('isometric', 'viewIsometric'),
-    ('front', 'viewFront'),
-    ('top', 'viewTop'),
-    ('right', 'viewRight'),
-]
+# Load views from configuration
+def load_views_config(views_path):
+    if not os.path.exists(views_path):
+        print(f"ERROR: Views config not found at {views_path}")
+        sys.exit(1)
+    with open(views_path) as f:
+        views_data = json.load(f)
+    return [(name, config['freecad_method']) for name, config in views_data.items()]
+
+views = load_views_config(views_path)
+print(f"Rendering {len(views)} views: {[v[0] for v in views]}")
 
 # Get active view
 view = FreeCADGui.activeView()
@@ -87,12 +93,22 @@ FreeCAD.closeDocument(doc.Name)
 FreeCADGui.getMainWindow().close()
 EOF
 
+# Get view.json path
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+VIEWS_JSON="$SCRIPT_DIR/../../constant/view.json"
+
+# Count expected renders from view.json
+if [ -f "$VIEWS_JSON" ]; then
+    EXPECTED_RENDERS=$(python3 -c "import json; print(len(json.load(open('$VIEWS_JSON'))))")
+else
+    EXPECTED_RENDERS=4
+fi
+
 # Run FreeCAD with the script
 echo "Rendering $FCSTD_FILE..."
-"$FREECAD" "$TEMP_SCRIPT" "$FCSTD_FILE" "$OUTPUT_DIR" "$BASENAME" 2>&1 | grep -v "Populating font" || true
+"$FREECAD" "$TEMP_SCRIPT" "$FCSTD_FILE" "$OUTPUT_DIR" "$BASENAME" "$VIEWS_JSON" 2>&1 | grep -v "Populating font" || true
 
 # Check if renders were created
-EXPECTED_RENDERS=4
 ACTUAL_RENDERS=$(ls "$OUTPUT_DIR"/${BASENAME}.render.*.png 2>/dev/null | wc -l | tr -d ' ')
 
 if [ "$ACTUAL_RENDERS" -ge "$EXPECTED_RENDERS" ]; then

@@ -6,6 +6,7 @@ Usage: freecadcmd export_renders.py <input.FCStd> <output_render>
 
 import sys
 import os
+import json
 
 # Check if we're running in FreeCAD
 try:
@@ -14,6 +15,23 @@ try:
 except ImportError:
     print("ERROR: This script must be run with freecadcmd or FreeCAD")
     sys.exit(1)
+
+
+def load_views_config():
+    """Load view configurations from constant/view.json"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.join(script_dir, '..', '..')
+    views_path = os.path.join(repo_root, 'constant', 'view.json')
+
+    if not os.path.exists(views_path):
+        print(f"ERROR: Views config not found at {views_path}")
+        sys.exit(1)
+
+    with open(views_path) as f:
+        views_data = json.load(f)
+
+    # Convert to list of (name, method) tuples
+    return [(name, config['freecad_method']) for name, config in views_data.items()]
 
 def export_renders(fcstd_path, output_render, background='#C6D2FF'):
     """Export multiple views from an FCStd file as PNG images"""
@@ -96,13 +114,9 @@ def export_renders(fcstd_path, output_render, background='#C6D2FF'):
     # Recompute to ensure everything is updated
     doc.recompute()
     
-    # Define views to export
-    views = [
-        ('isometric', 'viewIsometric'),
-        ('front', 'viewFront'),
-        ('top', 'viewTop'),
-        ('right', 'viewRight'),
-    ]
+    # Load views from configuration
+    views = load_views_config()
+    print(f"Rendering {len(views)} views: {[v[0] for v in views]}")
     
     # Disable animation for faster rendering
     try:
