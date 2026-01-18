@@ -94,6 +94,7 @@ def analyze_mass(fcstd_path: str, materials_path: str) -> dict:
     total_mass = sum(material_weights.values())
     total_volume = sum(material_volumes.values())
     total_volume_air = material_volumes['air']
+    total_unsinkable_volume = total_volume - total_volume_air    
     
     # Build result
     result = {
@@ -101,8 +102,9 @@ def analyze_mass(fcstd_path: str, materials_path: str) -> dict:
         'total_mass_kg': round(total_mass, 2),
         'total_volume_liters': round(total_volume, 2),
         'total_unsinkable_volume_liters':
-             round(total_volume - total_volume_air, 2),
-        'displacement_saltwater_kg': round(total_volume * 1.025, 2),
+             round(total_unsinkable_volume, 2),
+        'total_unsinkable_displacement_saltwater_kg':
+             round(total_unsinkable_volume * 1.025, 2),
         'materials': {},
         'components': sorted(all_components, key=lambda x: x['mass_kg'], reverse=True),
         'component_count': len(all_components)
