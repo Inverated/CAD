@@ -119,8 +119,10 @@ def compute_derived(base: Dict[str, Any]) -> Dict[str, Any]:
     params['yard_spar_height'] = (base['mast_height'] -
                                   base['yard_spar_distance_from_top'])
 
-    # Boom length matches yard length (both hold the sail edges)
+    # Boom length matches yard length (rectangular sails)
     params['boom_length'] = base['yard_length']
+    params['sail_area_m2'] = (2 * base['sail_height'] / 1000
+                              * base['sail_width'] / 1000
 
     # Rudder calculations
     params['rudder_bearing_block_height'] = params['stringer_width']

@@ -1,6 +1,7 @@
 {
+  "configuration_name": "beaching",
+  "display_name": "Beaching",
   "configuration_description": "Beaching configuration - boat on shore with sails down",
-  "configuration_name": "Beaching",
   
   "required": [
       "mass",

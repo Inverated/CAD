@@ -21,16 +21,18 @@ title: Roti Proa II - 9m Day Tourism Vessel
 
 **Overall Length:** {{ site.data.rp2_closehaul_parameter.vaka_length }} mm  
 **Beam:** {{ site.data.rp2_closehaul_parameter.beam }} mm (with outrigger)  
-**Total mass:** {{ site.data.rp2_beaching_mass.total_mass_kg }} kg  
+**Total mass (unloaded):** {{ site.data.rp2_beaching_mass.total_mass_kg }} kg  
 **Total unsinkable volume:** {{ site.data.rp2_beaching_mass.total_unsinkable_volume_liters }} liters  
-**Displacement in saltwater:** {{ site.data.rp2_beaching_mass.total_unsinkable_displacement_saltwater_kg }} kg  
+**Displacement of unsinkable volume in saltwater:** {{ site.data.rp2_beaching_mass.total_unsinkable_displacement_saltwater_kg }} kg  
 **Capacity:** 4 passengers + 2 crew  
 **Solar Power:** 4 kW peak (8 panels)  
 **Motor Power:** 4 kW electric  
 **Cruising Speed:** 10 knots  
 **Daily Range:** 50 nautical miles (solar-electric only)  
 **Battery Type:** LiFePO₄  
-**Motor Runtime:** 5 hours (battery only)
+**Motor Runtime:** 5 hours (battery only)  
+**Masts** Two unstayed rotatable masts, cylindrical aluminium pipes with diameter {{ site.data.rp2_broadreach_parameter.mast_diameter }} mm and wall thickness {{ site.data.rp2_broadreach_parameter.mast_thickness }} mm; mast height from vaka sole: {{ site.data.rp2_broadreach_parameter.mast_height }} mm  
+**Rig:** Each mast carries one tanja sail, each rectangular-shaped {{ site.data.rp2_broadreach_parameter.sail_width }} mm x {{ site.data.rp2_broadreach_parameter.sail_height }} (total sail area: {{ site.data.rp2_broadreach_parameter.sail_area_m2 }} square meters)  
 
 ---
 
@@ -65,7 +67,7 @@ title: Roti Proa II - 9m Day Tourism Vessel
 
 <div style="max-width: 600px; margin: 1em auto;">
   <img src="{{ '/renders/rp2.beaching.buoyancy_design.render.front.png' | relative_url }}" alt="Buoyancy equilibrium - front view" style="width: 100%; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="text-align: center; font-size: 0.9em; color: #666; margin-top: 0.5em;">Boat at equilibrium waterline (front view)</p>
+  <p style="text-align: center; font-size: 0.9em; color: #666; margin-top: 0.5em;">Unloaded boat at equilibrium waterline (front view)</p>
 </div>
 
 We derive the following buoyancy characteristics from
@@ -109,7 +111,7 @@ As a proa with an outrigger (ama), this vessel has asymmetric stability characte
 - Capsize angle: {{ site.data.rp2_beaching_gz.summary.capsize_angle_deg }}° (boat rolls over, ama ends up on top)
 - Ama engagement: {{ site.data.rp2_beaching_gz.summary.ama_engagement_angle_deg }}° (ama touches water)
 
-Traditionally, proas are sailed with the ama to windward. Wind force heels the boat away from the ama, lifting it to reduce drag ("flying the ama"). The operating envelope is typically -5° to -20° heel in that case, well within the stable region. A solar proa should be able to sail with the ama to leeward when needed, to keep the sails from casting a shadow on the solar panels. At a heeling angle of 5°, the ama will be fully submerged and cause much drag but induce a righting moment until the turtle angle is reached. See [implementation](https://github.com/solar-proa/CAD/blob/main/src/gz/__main__.py).
+Traditionally, proas are sailed with the ama to windward. The wind force heels the boat away from the ama, lifting it (partially or even completely) out of the water to reduce drag ("flying the ama"). The operating envelope is typically -5° to -20° heel in that case, well within the stable region. A _solar_ proa should be able to sail well also with the ama to leeward, to keep the sails from casting a shadow on the solar panels. At a heeling angle of around 4°, the ama will be fully submerged and cause maximum drag but still induce a significant righting moment until the turtle angle is reached. See [implementation](https://github.com/solar-proa/CAD/blob/main/src/gz/__main__.py).
 
 ---
 
