@@ -2,12 +2,12 @@
   "boat_description": "Base parameters for RP2",
   "boat_name": "rp2",
   
-  "panels_longitudinal": 4,
-  "panels_transversal": 2,
+  "panels_longitudinal": 2,
+  "panels_transversal": 4,
   "deck_stringers": 4,
-
-  "panel_length": 1762,
-  "panel_width": 1134,
+  
+  "panel_length": 1134,
+  "panel_width": 2382,
   "panel_height": 4,
   
   "deck_width": 2000,
@@ -28,7 +28,7 @@
   "aka_cap_thickness": 5,
   "aka_cap_diameter": 170,
 
-  "akas_per_panel": 1,
+  "akas_per_panel": 2,
   "aka_rim": 400,
   
   "vaka_length": 9000,

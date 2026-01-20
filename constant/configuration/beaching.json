@@ -10,7 +10,8 @@
       "buoyancy",
       "gz",
       "buoyancy-design",
-      "buoyancy-render"
+      "buoyancy-render",
+      "validate-structure"
   ],
   
   "sail_camber_biru": 10000,

@@ -122,6 +122,7 @@ help:
 	@echo "  make gz                     - Compute GZ righting arm curve (JSON + PNG)"
 	@echo "  make buoyancy-design        - Position boat at equilibrium with water surface"
 	@echo "  make buoyancy-render        - Render images of boat at equilibrium"
+	@echo "  make validate-structure     - Validate structural integrity (all load cases)"
 	@echo ""
 	@echo "Parameter Targets:"
 	@echo "  make parameter              - Compute and save parameter to artifacts/"
@@ -460,3 +461,23 @@ buoyancy-render: $(BUOYANCY_DESIGN_ARTIFACT) $(RENDER_SOURCE)
 		echo "ImageMagick not found, skipping crop"; \
 	fi
 	@echo "✓ Buoyancy render complete for $(BOAT).$(CONFIGURATION)"
+
+# ==============================================================================
+# STRUCTURAL VALIDATION
+# ==============================================================================
+
+VALIDATE_STRUCTURE_DIR := $(SRC_DIR)/validate_structure
+VALIDATE_STRUCTURE_SOURCE := $(wildcard $(VALIDATE_STRUCTURE_DIR)/*.py)
+VALIDATE_STRUCTURE_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).$(CONFIGURATION).validate_structure.json
+
+$(VALIDATE_STRUCTURE_ARTIFACT): $(PARAMETER_ARTIFACT) $(MASS_ARTIFACT) $(GZ_ARTIFACT) $(VALIDATE_STRUCTURE_SOURCE) | $(ARTIFACT_DIR)
+	@echo "Running structural validation: $(BOAT).$(CONFIGURATION)"
+	@python3 -m src.validate_structure \
+		--parameters $(PARAMETER_ARTIFACT) \
+		--mass $(MASS_ARTIFACT) \
+		--gz $(GZ_ARTIFACT) \
+		--output $@
+
+.PHONY: validate-structure
+validate-structure: $(VALIDATE_STRUCTURE_ARTIFACT)
+	@echo "✓ Structural validation complete for $(BOAT).$(CONFIGURATION)"
