@@ -4,6 +4,73 @@ import math
 
 # maker functions for common shapes
 
+def horn_cleat(length, width, height, horn_angle=15):
+    """Create a horn cleat for mooring/towing lines.
+
+    The cleat is oriented along the X axis, centered at origin,
+    with the base at Z=0 and horns extending outward along X.
+
+    Args:
+        length: Overall length of the cleat (tip to tip)
+        width: Width of the base
+        height: Height of the horn tips above base
+        horn_angle: Upward angle of horn tips (degrees)
+
+    Returns:
+        A horn cleat shape centered at origin
+    """
+    # Dimensions derived from main parameters
+    base_height = height * 0.15
+    horn_radius = width * 0.2
+    waist_width = width * 0.35  # narrow center
+    waist_length = length * 0.2
+    horn_extent = (length - waist_length) / 2  # how far horns extend from center
+
+    # Base plate - tapered, wider at ends
+    base = Part.makeBox(length * 0.9, width, base_height)
+    base.translate(Base.Vector(-length * 0.45, -width / 2, 0))
+
+    # Center waist (narrow raised section connecting the horns)
+    waist = Part.makeBox(waist_length, waist_width, height * 0.5)
+    waist.translate(Base.Vector(-waist_length / 2, -waist_width / 2, base_height))
+
+    # Horns: cylinders that extend outward from center, angled slightly up
+    # Each horn is positioned at the edge of the waist and extends outward
+    # Cylinder is created along Z axis, then rotated to point outward and upward
+
+    # Left horn (negative X direction, tilted up)
+    # Rotation: (horn_angle - 90) rotates Z axis toward -X with upward tilt
+    horn_left = Part.makeCylinder(horn_radius, horn_extent)
+    horn_left.rotate(Base.Vector(0, 0, 0), Base.Vector(0, 1, 0), horn_angle - 90)
+    horn_left.translate(Base.Vector(-waist_length / 2, 0, base_height + height * 0.35))
+
+    # Right horn (positive X direction, tilted up)
+    # Rotation: (90 - horn_angle) rotates Z axis toward +X with upward tilt
+    horn_right = Part.makeCylinder(horn_radius, horn_extent)
+    horn_right.rotate(Base.Vector(0, 0, 0), Base.Vector(0, 1, 0), 90 - horn_angle)
+    horn_right.translate(Base.Vector(waist_length / 2, 0, base_height + height * 0.35))
+
+    # Rounded tips at the end of each horn
+    tip_offset_x = horn_extent * math.cos(math.radians(horn_angle))
+    tip_offset_z = horn_extent * math.sin(math.radians(horn_angle))
+
+    tip_left = Part.makeSphere(horn_radius)
+    tip_left.translate(Base.Vector(
+        -waist_length / 2 - tip_offset_x,
+        0,
+        base_height + height * 0.35 + tip_offset_z))
+
+    tip_right = Part.makeSphere(horn_radius)
+    tip_right.translate(Base.Vector(
+        waist_length / 2 + tip_offset_x,
+        0,
+        base_height + height * 0.35 + tip_offset_z))
+
+    # Combine all parts
+    cleat = base.fuse(waist).fuse(horn_left).fuse(horn_right).fuse(tip_left).fuse(tip_right)
+
+    return cleat
+
 # SHS: square hollow section: pipe with square profile
 
 def shs(outer, wall, length):
