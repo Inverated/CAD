@@ -7,6 +7,9 @@
 
 - add mast sections
 
-- add wind direction
+- add wind direction to designs
+
+- adjust movement direction arrow to end at the level of the bow
+
 
 

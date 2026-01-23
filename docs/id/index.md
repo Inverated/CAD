@@ -133,6 +133,8 @@ Struktur kemitraan dapat disesuaikan secara fleksibel dengan prioritas organisas
 
 - [Livio Deltin](https://www.linkedin.com/in/livio-deltin-37936629/), Senior Naval Architect, MEng CEng, Technical Advisor (Pro Bono)
 
+- [Marcel Eckhardt](https://www.linkedin.com/in/marcel-eckhardt-2607448a/), Electrical Engineer, Technical Advisor (Pro Bono)
+
 - [Abdullah Farid](https://www.linkedin.com/in/abdullah-engineer/), Engineer, Wärtsilä Marine, Advisor (Pro Bono)
 
 - Jason Wong, Computer Scientist, BSc (Hons) Computer Science (Pro Bono)
