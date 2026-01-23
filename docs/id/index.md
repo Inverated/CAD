@@ -129,7 +129,9 @@ Struktur kemitraan dapat disesuaikan secara fleksibel dengan prioritas organisas
 
 **Koordinator Proyek:** A/Prof Martin Henz, School of Computing, National University of Singapore
 
-**Penasihat Teknis:** Arsitek kapal, insinyur kapal, insinyur listrik
+**Penasihat Teknis:**
+
+- [Livio Deltin](https://www.linkedin.com/in/livio-deltin-37936629/), Senior Naval Architect, MEng CEng, Technical Advisor (Pro Bono)
 
 **Dukungan:** National University of Singapore, sponsor industri, donor swasta
 

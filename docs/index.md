@@ -127,7 +127,9 @@ Partnership structures can be flexibly tailored to organizational priorities.
 
 **Project Coordinator:** A/Prof Martin Henz, School of Computing, National University of Singapore
 
-**Technical Advisors:** Naval architect, naval engineer, electrical engineer
+**Technical Advisors:**
+
+- [Livio Deltin](https://www.linkedin.com/in/livio-deltin-37936629/), Senior Naval Architect, MEng CEng, Technical Advisor (Pro Bono)
 
 **Support:** National University of Singapore, industry sponsors, private donors
 
