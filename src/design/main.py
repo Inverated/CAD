@@ -252,7 +252,7 @@ if 'boat_speed_kt' in params:
         FreeCAD.Rotation(Base.Vector(1, 0, 0), -90))
 
 # wind arrows indicating wind movement direction
-# positioned so arrow tip is at mast (arrow points into the mast)
+# positioned so arrow tips form a square grid in plane perpendicular to wind
 def wind_arrows(y_offset, z_offset, h_offset):
     wind_arrow_length = params['wind_speed_kt'] * params['vaka_length'] / 50
     wind_arrow_shaft_radius = params['vaka_length'] / 200
@@ -260,20 +260,26 @@ def wind_arrows(y_offset, z_offset, h_offset):
                                        shaft_radius=wind_arrow_shaft_radius)
     wind_arrow = arrows.newObject("Part::Feature", "Wind_Arrow__wind_indicator")
     wind_arrow.Shape = wind_arrow_shape
-    tip_distance = 0  # horizontal distance from mast to arrow tip
+
     wind_dir_rad = math.radians(params['wind_direction'])
-    total_offset = wind_arrow_length + tip_distance
-    # Base position along arrow direction
-    wind_arrow_x = (params['vaka_x_offset'] -
-                    total_offset * math.cos(wind_dir_rad))
-    wind_arrow_y = y_offset + total_offset * math.sin(wind_dir_rad)
-    # Add perpendicular horizontal offset
-    wind_arrow_x += h_offset * math.sin(wind_dir_rad)
-    wind_arrow_y += h_offset * math.cos(wind_dir_rad)
-    wind_arrow_z = params['mast_height'] - z_offset
+
+    # Step 1: Calculate tip position (in plane at mast, perpendicular to wind)
+    # Start at mast position, then apply perpendicular horizontal offset
+    # Arrow direction is (sin(wind_dir), -cos(wind_dir), 0) due to -90+wind_dir rotation
+    # Perpendicular direction is (cos(wind_dir), sin(wind_dir), 0)
+    tip_x = params['vaka_x_offset'] + h_offset * math.cos(wind_dir_rad)
+    tip_y = y_offset + h_offset * math.sin(wind_dir_rad)
+    tip_z = params['mast_height'] - z_offset
+
+    # Step 2: Calculate base position by moving back from tip along arrow direction
+    # Arrow points in direction (sin(wind_dir), -cos(wind_dir), 0)
+    wind_arrow_x = tip_x - wind_arrow_length * math.sin(wind_dir_rad)
+    wind_arrow_y = tip_y + wind_arrow_length * math.cos(wind_dir_rad)
+    wind_arrow_z = tip_z
+
     rot1 = FreeCAD.Rotation(FreeCAD.Vector(0, 1, 0), 90)
     rot2 = FreeCAD.Rotation(FreeCAD.Vector(0, 0, 1),
-                            - params['wind_direction'])
+                            - 90 + params['wind_direction'])
     combined = rot2.multiply(rot1)
     wind_arrow.Placement = FreeCAD.Placement(
         Base.Vector(wind_arrow_x, wind_arrow_y, wind_arrow_z),
