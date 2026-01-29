@@ -125,6 +125,8 @@
   "side_board_plate_above_sole": 600,
 
   "navigation_light_height": 100,
-  "navigation_light_diameter": 120
+  "navigation_light_diameter": 120,
+    
+  "gusset_thickness": 7
     
 }
