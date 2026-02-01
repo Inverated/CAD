@@ -68,10 +68,10 @@ jobs:
         run: |
           pip install matplotlib numpy
 
-      - name: Install TeX Live
+      - name: Install TeX Live and SVG tools
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y texlive texlive-fonts-extra latexmk
+          sudo apt-get install -y texlive texlive-fonts-extra latexmk librsvg2-bin
 
       - name: Build all required FreeCAD models and run all stages
         run: |
