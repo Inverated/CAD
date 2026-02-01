@@ -47,7 +47,8 @@ $(ARTIFACT_DIR) $(DOCS_DATA_DIR):
 # AUTO-DISCOVERY: Find all boats and configurations
 # ==============================================================================
 
-BOATS := $(basename $(notdir $(wildcard $(BOAT_DIR)/*.json)))
+#BOATS := $(basename $(notdir $(wildcard $(BOAT_DIR)/*.json)))
+BOATS := rp2
 CONFIGURATIONS := $(basename $(notdir $(wildcard $(CONFIGURATION_DIR)/*.json)))
 
 # Filter out any backup or temp files

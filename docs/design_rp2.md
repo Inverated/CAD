@@ -46,7 +46,6 @@ title: Roti Proa II - Design Specification and Renderings
     <img src="{{ '/lines/rp2.goosewing.lines.summary.bodyplan.svg' | relative_url }}" alt="Roti Proa II Body Plan" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   </div>
 
-
 ---
 
 ## 3D Renders
