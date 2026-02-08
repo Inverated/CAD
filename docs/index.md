@@ -112,7 +112,7 @@ All vessel designs are created using **parametric CAD modeling in FreeCAD and Py
 
 ## Partnerships
 
-We are proud to work with [Dexmarine Pte Ltd](https://dexmarine.com/),
+We are proud to work with [Dexteritas Pte Ltd](https://dexmarine.com/) also known as Dexmarine,
 our electric marine propulsion partner who sponsors the electric propulsion
 system for Roti Proa II.
 
