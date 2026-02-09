@@ -139,13 +139,17 @@ National University of Singapore.
 
 **Team Members:**
 
-- Chong Yew Mun Luke, CS, MComp 2026
+- Chong Yew Mun Luke, Computer Science, MComp 2026
 
-- Vikram Goyal, CS, BComp 2027
+- Vikram Goyal, Computer Science, BComp 2027
 
 - Kor Qian Fu, Business AI Systems, BComp 2028
 
 - Lim Jia Yi (Julia), Business AI Systems, BComp 2028
+
+- Ong Miao Ying, Clara, Robotics & Machine Intelligence, Second Major in Innovation & Design, BEng 2029 
+
+- Tan Jia Jun, Mechanical Engineering, BEng 2027
 
 **Technical Advisors:**
 
@@ -170,5 +174,4 @@ National University of Singapore.
 
 <div style="text-align: center; padding: 2em 0; color: #666; font-size: 0.9em;">
   <p><em>Combining Southeast Asian maritime traditions with modern sustainable technology</em></p>
-  <p>This site and all CAD models are automatically built and deployed via GitHub Actions | <a href="{{ '/technical.html' | relative_url }}">See how it works</a></p>
 </div>

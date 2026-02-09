@@ -4,12 +4,9 @@ title: Roti Proa III - 13m Multi-Day Vessel
 ---
 
 <div style="display: flex; align-items: center; gap: 2em; margin-bottom: 2em; flex-wrap: wrap;">
-  <div style="flex: 1; min-width: 300px;">
-    <h1 style="margin: 0;">Roti Proa III</h1>
-    <h2 style="margin-top: 0.5em; font-weight: 300;">13-Meter Solar-Electric Multi-Day Cruiser</h2>
-  </div>
-  <div style="flex: 1; min-width: 300px; max-width: 500px;">
-    <img src="{{ '/renders/rp3.closehaul.render.isometric.png' | relative_url }}" alt="Roti Proa III" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <div style="flex: 1; min-width: 400px; max-width: 600px;">
+    <img src="{{ '/images/rp3.closehaul.render.isometric.png' | relative_url }}" alt="Roti Proa III" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="font-size: 0.9em; color: #666; margin-top: 0.5em; font-style: italic;">Roti Proa II, sailing close-haul, isometric view generated from FreeCAD design</p>
   </div>
 </div>
 
@@ -45,9 +42,9 @@ Dragon boats have been used across Asia for over 2,000 years. The DB22 design re
 
 | Specification | Estimated Value |
 |--------------|----------------|
-| Overall Length (LOA) | {{ site.data.rp3_closehaul_parameter.vaka_length }} mm |
-| Beam (hull) | ~1.2m (traditional dragon boat proportions) |
-| Beam (with outrigger) | {{ site.data.rp3_closehaul_parameter.beam }} mm |
+| Overall Length (LOA) | 13 m |
+| Beam (hull) | 1.2 m (traditional dragon boat proportions) |
+| Beam (with outrigger) | 7.5 m |
 | Capacity | 5-6 passengers + 2 crew |
 | Solar Power | 6-8kW peak (estimated) |
 | Motor Power | 5-6kW electric (estimated) |

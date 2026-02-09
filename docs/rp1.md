@@ -4,12 +4,9 @@ title: Roti Proa I - 4.2m Prototype
 ---
 
 <div style="display: flex; align-items: center; gap: 2em; margin-bottom: 2em; flex-wrap: wrap;">
-  <div style="flex: 1; min-width: 300px;">
-    <h1 style="margin: 0;">Roti Proa I</h1>
-    <h2 style="margin-top: 0.5em; font-weight: 300;">4.2-Meter Proof-of-Concept Prototype</h2>
-  </div>
-  <div style="flex: 1; min-width: 300px; max-width: 500px;">
+  <div style="flex: 1; min-width: 500px; max-width: 700px;">
     <img src="{{ '/images/rp1.jpg' | relative_url }}" alt="Roti Proa I" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="font-size: 0.9em; color: #666; margin-top: 0.5em; font-style: italic;">Roti Proa I, helmed by Solar Proa Advisor Abdullah Farid, conducting performance testing on May 30, 2025</p>
   </div>
 </div>
 
@@ -26,10 +23,10 @@ Roti Proa I was our proof-of-concept prototype that validated the feasibility of
 **Key Achievements:**
 - **Sea trials validated** in Singapore waters near Changi
 - **Top speed:** 6.5 knots (12 km/h) under electric power
-- **Solar capacity:** 1kW peak (2 panels)
-- **Propulsion:** 2kW electric outboard motor
-- **Battery:** LiFePO₄ system
-- **Sailing rig:** Dual independent sport rigs for experimental configuration
+- **Solar capacity:** 1 kW peak (2 panels)
+- **Propulsion:** 2 kW electric outboard motor
+- **Batteries:** 2 x 50 Ah, LiFePO₄
+- **Sailing rig:** Dual independent sport rigs (Optimist) for experimental configuration
 
 The prototype proved that solar proas are viable for tropical Southeast Asian waters and provided crucial data for scaling up to the 9-meter Roti Proa II design.
 
@@ -84,14 +81,6 @@ Roti Proa I was funded through:
 - **Maybank Green Fund:** S$5,000 (via NUS Office of Student Affairs)
 - **Private donations and sponsorships:** S$7,000
 - **Total project cost:** S$12,000
-
----
-
-## From Prototype to Product
-
-The success of Roti Proa I demonstrates that our vision is technically sound. Now, with Roti Proa II under construction, we're taking the next step toward commercial viability—a vessel designed not just to prove a concept, but to serve real eco-tourism operations in tropical Southeast Asia.
-
-**Read the full story:** [Changi Sailing Club Article →](https://www.csc.org.sg/2025/07/11/roti-proa-an-experimental-wind-and-solar-powered-boat/)
 
 ---
 
