@@ -261,7 +261,8 @@ PARAMETER_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).$(CONFIGURATION).parameter.json
 $(PARAMETER_ARTIFACT): $(BOAT_FILE) $(CONFIGURATION_FILE)
 	@echo "Computing parameters for $(BOAT) and $(CONFIGURATION)..."
 	@mkdir -p $(ARTIFACT_DIR)
-	@python3 -m shipshape.parameter \
+	@PYTHONPATH=$(PWD) python3 -m shipshape.parameter \
+		--compute src.parameter.compute \
 		--boat $(BOAT_FILE) \
 		--configuration $(CONFIGURATION_FILE) \
 		--output $@
