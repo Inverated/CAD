@@ -20,8 +20,6 @@ def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str
     battery_choice = circuit_data['battery_setup']['choice']
     battery_setup_info = circuit_data['battery_setup'][battery_choice]
     battery_capacity_Amin = battery_setup_info['capacity_ah'] * battery_setup_info['battery_in_parallel'] * 60
-    battery_min_voltage = battery_setup_info['min_voltage']
-    battery_max_voltage = battery_setup_info['max_voltage']
     
     current_capacity_Amin = current_soc * battery_capacity_Amin
 

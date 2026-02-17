@@ -14,6 +14,7 @@ DOTTED_STYLE = ":"     #'-', '--', '-.', ':', 'None', ' ', '', 'solid', 'dashed'
 IMG_FILE_NAME = "sweep_simulation_results.png"
 WARNING_FILE_NAME = "sweep_simulation_warnings.json"
 
+
 def generate_graph(results: list, x_axis: list, x_label: str = "",
                    voltage_display_choice: list = [], 
                    current_display_choice: list = [], 
@@ -62,6 +63,7 @@ def generate_graph(results: list, x_axis: list, x_label: str = "",
     # Plot Voltage
     if voltage_display_choice:
         ax = axes[plot_idx]
+        ax.set_title(f"voltage_vs_{x_label}")
         color_idx = 0
         
         for category in voltage_display_choice:
@@ -172,16 +174,16 @@ def generate_graph(results: list, x_axis: list, x_label: str = "",
         ax_single.set_xlabel(ax.get_xlabel())
         ax_single.set_ylabel(ax.get_ylabel())
 
-        save_file = os.path.join(save_path, f"{ax.get_title()}.png")
+        save_file = save_path + "." + f"{ax.get_title()}.png"
         fig_single.savefig(save_file, bbox_inches="tight")
         plt.close(fig_single)
     
     if save_path:
-        with open(os.path.join(save_path, WARNING_FILE_NAME), 'w') as f:
+        with open(save_path + "." + WARNING_FILE_NAME, 'w') as f:
             json.dump(warning_points, f, indent=4)
-            print(f"Warning points saved to {os.path.join(save_path, WARNING_FILE_NAME)}")
+            print(f"Warning points saved to {save_path}.{WARNING_FILE_NAME}")
             
-        save_file = os.path.join(save_path, IMG_FILE_NAME)
+        save_file = save_path + "." + IMG_FILE_NAME
         plt.savefig(save_file, dpi=300, bbox_inches='tight')
         print(f"Graph saved to {save_file}")
     

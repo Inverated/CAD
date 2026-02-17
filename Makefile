@@ -131,7 +131,7 @@ help:
 	@echo "  make validate-structure     - Validate structural integrity (all load cases)"
 	@echo "  make lines                  - Generate lines plan (TechDraw with sections)"
 	@echo "  make lines-pdf              - Compile lines plan LaTeX to PDF"
-	@echo "  make electrical-simulation  - Run electrical simulation (SIMULATION_TYPE=voyage)"
+	@echo "  make electrical-simulation  - Run electrical simulation (SIMULATION_TYPE=operating_point, sweep_throttle, sweep_panel_power, voyage, or all)"
 	@echo ""
 	@echo "Parameter Targets:"
 	@echo "  make parameter              - Compute and save parameter to artifacts/"
@@ -606,10 +606,10 @@ lines-pdf: $(LINES_PDF)
 ELECTRICAL_DIR := $(SRC_DIR)/electrical_simulation
 ELECTRICAL_SOURCE := $(wildcard $(ELECTRICAL_DIR)/*.py) $(wildcard $(ELECTRICAL_DIR)/components/*.py)
 ELECTRICAL_CONST_DIR := $(CONST_DIR)/electrical
-ELECTRICAL_CIRCUIT_FILE := $(ELECTRICAL_CONST_DIR)/circuit_setup.json
+ELECTRICAL_CIRCUIT_FILE := $(ELECTRICAL_CONST_DIR)/boat/${BOAT}/circuit_setup.json
 ELECTRICAL_VOYAGE_FILE := $(ELECTRICAL_CONST_DIR)/voyage_setup.json
 ELECTRICAL_CONSTANTS_FILE := $(ELECTRICAL_CONST_DIR)/constants.json
-SIMULATION_TYPE ?= voyage
+SIMULATION_TYPE ?= all
 ELECTRICAL_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).$(CONFIGURATION).electrical_simulation
 
 $(ELECTRICAL_ARTIFACT): $(ELECTRICAL_CIRCUIT_FILE) $(ELECTRICAL_CONSTANTS_FILE) $(ELECTRICAL_SOURCE) | $(ARTIFACT_DIR)
@@ -617,14 +617,15 @@ $(ELECTRICAL_ARTIFACT): $(ELECTRICAL_CIRCUIT_FILE) $(ELECTRICAL_CONSTANTS_FILE) 
 	@$(PYTHON) -m src.electrical_simulation \
 		--circuit $(ELECTRICAL_CIRCUIT_FILE) \
 		--constants $(ELECTRICAL_CONSTANTS_FILE) \
-		$(if $(filter voyage,$(SIMULATION_TYPE)),--voyage $(ELECTRICAL_VOYAGE_FILE)) \
-		--output $@/result.json \
+		--boat $(BOAT) \
+		--voyage $(ELECTRICAL_VOYAGE_FILE) \
+		--output $@ \
 		--simulation-type $(SIMULATION_TYPE)
 	@echo "✓ Electrical simulation complete: $@"
 
 .PHONY: electrical-simulation
 electrical-simulation: $(ELECTRICAL_ARTIFACT)
-	@echo "✓ Electrical simulation ($(SIMULATION_TYPE)) complete for $(BOAT).$(CONFIGURATION)"
+	@echo "✓ Electrical simulation completed"
 
 # ==============================================================================
 # TEMPLATE FOR NEW STAGES (copy this block and replace TEMPLATE/template)
