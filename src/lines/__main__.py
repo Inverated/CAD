@@ -1259,7 +1259,7 @@ def generate_latex(boat_name, config_name, params, sections, horizontal_sections
 
     # Generate section pages for LaTeX - each section on its own page
     section_pages = [
-        f"\\section*{{Body Plan}}\n\n"
+        f"\\section*{{Body Plan (all sections)}}\n\n"
         f"\\begin{{figure}}[H]\n"
         f"\\centering\n"
         f"\\IfFileExists{{{base_name}.bodyplan.pdf}}{{%\n"
@@ -1269,6 +1269,8 @@ def generate_latex(boat_name, config_name, params, sections, horizontal_sections
         f"}}\n"
         f"\\caption{{Combined body plan---All sections overlayed}}\n"
         f"\\end{{figure}}"
+        f"\\newpage\n"
+        f"\\section*{{Body Plan Sections}}"
     ]
     for name, y_pos in sections:
         svg_name = f"{base_name}.section.{name}"
@@ -1287,7 +1289,7 @@ def generate_latex(boat_name, config_name, params, sections, horizontal_sections
     section_figures = "\n\n".join(section_pages)
 
     # Generate horizontal section pages for LaTeX
-    horizontal_pages = [f"\\section*{{Horizontal Sections (Plan View)}}"]
+    horizontal_pages = [f"\\section*{{Horizontal Sections}}"]
     for name, z_pos in horizontal_sections:
         svg_name = f"{base_name}.horizontal.{name}"
         horizontal_pages.append(
@@ -1343,7 +1345,7 @@ def generate_latex(boat_name, config_name, params, sections, horizontal_sections
 %% Profile at top (full width)
 \\noindent
 \\begin{{minipage}}[t]{{0.30\\textwidth}}
-\\subsection*{{Profile (vaka, rudder and ama sections)}}
+\\subsection*{{Profile (all sections)}}
 \\noindent
 \\IfFileExists{{{base_name}.summary.profile.pdf}}{{%
 \\noindent
@@ -1506,7 +1508,7 @@ than the traditional half-sections used for symmetric hulls.
 %% ===== COMBINED PROFILE (all sections, clipped) =====
 \\newpage
 
-\\section*{{Profile (All Sections)}}
+\\section*{{Profile (all sections)}}
 
 \\begin{{figure}}[H]
 \\centering
@@ -1521,7 +1523,7 @@ than the traditional half-sections used for symmetric hulls.
 %% ===== PROFILE - VAKA =====
 \\newpage
 
-\\section*{{Profile}}
+\\section*{{Profile Sections}}
     
 \\begin{{figure}}[H]
 \\centering
@@ -1563,7 +1565,7 @@ than the traditional half-sections used for symmetric hulls.
 %% ===== FULL BREADTH PLAN =====
 \\newpage
 
-\\section*{{Full Breadth Plan}}
+\\section*{{Full Breadth Plan (all horizontal sections)}}
     
 \\begin{{figure}}[H]
 \\centering
