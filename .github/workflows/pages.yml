@@ -93,7 +93,7 @@ jobs:
 
       - name: Generate diagrams
         run: |
-          python3 -m shipshape.validate_structure.diagrams
+          PYTHONPATH=. python3 -m src.structural.diagrams
 
       - name: Copy constant files to docs/_data
         run: |
