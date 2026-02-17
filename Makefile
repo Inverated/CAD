@@ -50,6 +50,7 @@ $(ARTIFACT_DIR) $(DOCS_DATA_DIR):
 # AUTO-DISCOVERY: Find all boats and configurations
 # ==============================================================================
 
+#Temporarily fix at rp2 to avoid running all the designs while testing
 #BOATS := $(basename $(notdir $(wildcard $(BOAT_DIR)/*.json)))
 BOATS := rp2
 CONFIGURATIONS := $(basename $(notdir $(wildcard $(CONFIGURATION_DIR)/*.json)))
@@ -103,7 +104,8 @@ required-all:
 		for configuration in $(CONFIGURATIONS); do \
 			echo ""; \
 			$(MAKE) required BOAT=$$boat CONFIGURATION=$$configuration || true; \
-		done \
+		done; \
+		$(MAKE) electrical-simulation BOAT=$$boat || true; \
 	done
 	@echo ""
 	@echo "✓ All required stages complete!"
@@ -147,8 +149,7 @@ help:
 	@echo "  make design BOAT=rp2 CONFIGURATION=closehaul"
 	@echo "  make color BOAT=rp3 CONFIGURATION=closehaul MATERIAL=proa"
 	@echo "  make render BOAT=rp2 CONFIGURATION=closehaul"
-	@echo "  make electrical-simulation SIMULATION_TYPE=voyage"
-	@echo "  make electrical-simulation SIMULATION_TYPE=sweep_throttle"
+	@echo "  make electrical-simulation BOAT=rp2 SIMULATION_TYPE=voyage"
 	@echo ""
 	@echo "FreeCAD: $(FREECAD)"
 
