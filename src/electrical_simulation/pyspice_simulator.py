@@ -3,7 +3,7 @@ from .parse_result import parse_simulation_result
 from .result_checker import cross_check_result
 from PySpice.Spice.Netlist import Circuit
 
-def begin_simulation(circuit, component_object, errors, pyspice_availablility=False,
+def begin_simulation(circuit, component_object, errors, ngspice_available=False,
                      start_simulation=True, ignore_error=True, simulation_logging=False,
                      show_panels=False, show_errors=False, show_warnings=False, constants=None):
     simulation_started = False
@@ -18,7 +18,7 @@ def begin_simulation(circuit, component_object, errors, pyspice_availablility=Fa
             simulation_started = True
             meta_data = {"name": circuit.title, "date": datetime.datetime.now().isoformat()}
             
-            analysis, result, struc = __simulate__(circuit, meta_data, errors, pyspice_availablility, simulation_logging, constants)
+            analysis, result, struc = __simulate__(circuit, meta_data, errors, ngspice_available, simulation_logging, constants)
             parse_simulation_result(analysis, result, struc, simulation_logging, show_panels, constants=constants)
             cross_check_result(analysis, component_object, result, constants=constants)
     else:

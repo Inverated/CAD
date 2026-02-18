@@ -4,7 +4,7 @@ from .sweep_graph_generation import generate_graph
 from .pyspice_simulator import begin_simulation
 from .circuit_constructor import build_circuit_from_json
 
-def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str, ngspice_available: bool, constants=None):
+def start_voyage(circuit_setup: json, voyage_config_loc: str, save_path: str, ngspice_available: bool, constants=None):
     with open(voyage_config_loc, 'r') as f:
         data = json.load(f)
 
@@ -12,13 +12,8 @@ def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str
     current_soc = data['initial_battery_soc']
     segments = data['segments']
     
-    with open(circuit_config_loc, 'r') as f:
-        circuit_data = json.load(f)
-        
-
-    battery_choice = circuit_data['battery_setup']['choice']
-    battery_setup_info = circuit_data['battery_setup'][battery_choice]
-    battery_capacity_Amin = battery_setup_info['capacity_ah'] * battery_setup_info['battery_in_parallel'] * 60
+    battery_info = circuit_setup['battery']
+    battery_capacity_Amin = battery_info['capacity_ah'] * battery_info['battery_in_parallel'] * 60
     
     current_capacity_Amin = current_soc * battery_capacity_Amin
 
@@ -41,7 +36,7 @@ def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str
         modifications['current_soc'] = current_soc
         
         # Run with original circuit first
-        circuit, component_object, errors = build_circuit_from_json(circuit_config_loc=circuit_config_loc, modifications=modifications, constants=constants)
+        circuit, component_object, errors = build_circuit_from_json(circuit_setup=circuit_setup, modifications=modifications, constants=constants)
         analysis, result = begin_simulation(circuit, component_object, errors, ngspice_available, constants=constants)
 
         if results == []:
@@ -76,7 +71,7 @@ def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str
             
             # Re-run with 0 charge current for rest of time
             modifications['max_charge_current'] = 0
-            circuit, component_object, errors = build_circuit_from_json(circuit_config_loc=circuit_config_loc, modifications=modifications, constants=constants)
+            circuit, component_object, errors = build_circuit_from_json(circuit_setup=circuit_setup, modifications=modifications, constants=constants)
             analysis, result = begin_simulation(circuit, component_object, errors, ngspice_available, constants=constants)
             
             results.append(result)
@@ -98,7 +93,7 @@ def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str
             
             # Re-run with 0 discharge current for rest of time
             modifications['max_discharge_current'] = 0
-            circuit, component_object, errors = build_circuit_from_json(circuit_config_loc=circuit_config_loc, modifications=modifications, constants=constants)
+            circuit, component_object, errors = build_circuit_from_json(circuit_setup=circuit_setup, modifications=modifications, constants=constants)
             analysis, result = begin_simulation(circuit, component_object, errors, ngspice_available, constants=constants)
             
             results.append(result)
@@ -123,7 +118,7 @@ def start_voyage(circuit_config_loc: str, voyage_config_loc: str, save_path: str
                    battery_capacity=battery_capacity_list,
                    save_path=save_path, constants=constants)   
     
-def real_time_digital_simulation(circuit_config_loc: str, ngspice_available: bool):
+def real_time_digital_simulation(circuit_setup: json, ngspice_available: bool):
     None
 
 def step_up_prev(results: list, time_range_min: list, battery_capacity_list: list):

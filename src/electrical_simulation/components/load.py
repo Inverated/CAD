@@ -1,6 +1,6 @@
 from ..components.battery_array import Battery_Array
 
-RAWSPICE_ITERATIONS = 1e6
+RAWSPICE_ITERATIONS = 1e2
 
 class Load:
     def __init__(self, circuit, components, constants=None, **kwargs):
@@ -17,13 +17,15 @@ class Load:
         BATTERY_MAX_DISCHARGE_CURRENT = battery_array.get_discharge_limit()
         MOTOR_CURRENT_DEMAND = self.MOTOR_POWER_DEMAND / battery_array.get_total_voltage()
         MOTOR_RESISTANCE = self.MOTOR_VOLTAGE / MOTOR_CURRENT_DEMAND
-
         POWER_SOURCE = battery_array.get_terminal()
         POWER_SOURCE_ID = battery_array.get_terminal_id()
         
         
         self.circuit.V(f"{self.load_name}", POWER_SOURCE, f"{self.load_name}", self.constants["GROUNDING_RESISTANCE"])
-        self.circuit.raw_spice += f"B{self.load_name} {self.load_name} 0 I = I(V{POWER_SOURCE_ID})<-{BATTERY_MAX_DISCHARGE_CURRENT} ? {MOTOR_CURRENT_DEMAND}+(I(V{POWER_SOURCE_ID})+{BATTERY_MAX_DISCHARGE_CURRENT})*{RAWSPICE_ITERATIONS} : {MOTOR_CURRENT_DEMAND}\n"
+        # Restrict total current into loads from bus first, then in Load, calcuate percentage restricted
+        # and multiply that by the current demand in each load
+        print(MOTOR_CURRENT_DEMAND, BATTERY_MAX_DISCHARGE_CURRENT)
+        self.circuit.raw_spice += f"B{self.load_name} {self.load_name} 0 I = I(V{POWER_SOURCE_ID})<-{BATTERY_MAX_DISCHARGE_CURRENT} ? {MOTOR_CURRENT_DEMAND}+(I(V{POWER_SOURCE_ID})+{BATTERY_MAX_DISCHARGE_CURRENT})*{RAWSPICE_ITERATIONS} : {MOTOR_CURRENT_DEMAND})\n"
         
         self.components["load"].append(f"{self.load_name}")
         if log:

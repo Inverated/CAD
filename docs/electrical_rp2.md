@@ -13,30 +13,38 @@ title: Roti Proa II - Electrical Simulation
 
 Configuration: **{{ site.data.rp2_electrical_simulation_operating_point.mppt_result.array_count }}× MPPT arrays** in parallel.
 
-{% for entry in site.data.boat_rp2_circuit_setup.mppt_panel_setup %}{% if entry[0] contains "config_" %}{% assign cfg = entry[1] %}
-{% if cfg.count == 0 %} {% continue %} {% endif %}
+{% for entry in site.data.boat_rp2_circuit_setup.mppt_panel %}{% if entry[0] contains "config_" %}{% assign cfg = entry[1] %}
+{% if cfg.count == 0 %}{% continue %}{% endif %}
+{% assign panel_choice = cfg.panel_info.choice %}
+{% assign panel = site.data.components.Panel[panel_choice] %}
+{% assign mppt_choice = cfg.mppt_info.choice %}
+{% assign mppt = site.data.components.MPPT[mppt_choice] %}
 
 #### {{ entry[0] | replace: "_", " " | capitalize }}
 
 | Parameter | Value |
 |-----------|-------|
 | Array Count | {{ cfg.count }} |
-| Panel Power | {{ cfg.panel_info.power }} W |
-| Panel Voltage | {{ cfg.panel_info.voltage }} V |
+| Panel | {{ panel_choice | replace: "_", " " }} |
+| Panel Power | {{ panel.power }} W |
+| Panel Voltage | {{ panel.voltage }} V |
 | Panels in Series | {{ cfg.panel_info.in_series }} |
 | Panels in Parallel | {{ cfg.panel_info.in_parallel }} |
-| MPPT Max Input Voltage | {{ cfg.mppt_info.max_input_voltage }} V |
-| MPPT Max Input Current | {{ cfg.mppt_info.max_input_current }} A |
-| MPPT Max Output Voltage | {{ cfg.mppt_info.max_output_voltage }} V |
-| MPPT Max Output Current | {{ cfg.mppt_info.max_output_current }} A |
-| MPPT Efficiency | {{ cfg.mppt_info.efficiency | times: 100 }}% |
+| Solar Power | {{ cfg.panel_info.solar_power | times: 100 }}% |
+| MPPT | {{ mppt_choice | replace: "_", " " }} |
+| MPPT Max Input Voltage | {{ mppt.max_input_voltage }} V |
+| MPPT Max Input Current | {{ mppt.max_input_current }} A |
+| MPPT Max Output Voltage | {{ mppt.max_output_voltage }} V |
+| MPPT Max Output Current | {{ mppt.max_output_current }} A |
+| MPPT Efficiency | {{ mppt.efficiency | times: 100 }}% |
 
 {% endif %}{% endfor %}
 
 ### Battery Setup
 
-{% assign bat_choice = site.data.boat_rp2_circuit_setup.battery_setup.choice %}
-{% assign bat = site.data.boat_rp2_circuit_setup.battery_setup[bat_choice] %}
+{% assign bat_choice = site.data.boat_rp2_circuit_setup.battery.choice %}
+{% assign bat = site.data.components.Battery[bat_choice] %}
+{% assign bat_setup = site.data.boat_rp2_circuit_setup.battery %}
 
 Battery chemistry: **{{ bat_choice }}**
 
@@ -45,27 +53,25 @@ Battery chemistry: **{{ bat_choice }}**
 | Nominal Battery Voltage | {{ bat.battery_voltage }} V |
 | Min Voltage | {{ bat.min_voltage }} V |
 | Max Voltage | {{ bat.max_voltage }} V |
-| Batteries in Series | {{ bat.battery_in_series }} |
-| Batteries in Parallel | {{ bat.battery_in_parallel }} |
-| System Voltage (series) | {{ bat.min_voltage | times: bat.battery_in_series }} V – {{ bat.max_voltage | times: bat.battery_in_series }} V |
+| Batteries in Series | {{ bat_setup.battery_in_series }} |
+| Batteries in Parallel | {{ bat_setup.battery_in_parallel }} |
+| System Voltage (series) | {{ bat.min_voltage | times: bat_setup.battery_in_series }} V – {{ bat.max_voltage | times: bat_setup.battery_in_series }} V |
 | Max Charge Current | {{ bat.max_charge_current }} A |
 | Max Discharge Current | {{ bat.max_discharge_current }} A |
 | Capacity | {{ bat.capacity_ah }} Ah |
-| Initial SOC | {{ bat.current_soc | times: 100 }}% |
+| Initial SOC | {{ bat_setup.current_soc | times: 100 }}% |
 
 ### Load Setup
 
-{% assign load_key = site.data.boat_rp2_circuit_setup.load_setup | where_exp: "item", "item[0] != 'description'" %}
-{% for load_entry in site.data.boat_rp2_circuit_setup.load_setup %}{% unless load_entry[0] == "description" %}{% assign load_name = load_entry[0] %}{% assign load_val = load_entry[1] %}
+{% for load_entry in site.data.boat_rp2_circuit_setup.load %}{% assign load_cfg = load_entry[1] %}{% assign load_choice = load_cfg.choice %}{% assign load_spec = site.data.components.Load[load_choice] %}
 
 | Parameter | Value |
 |-----------|-------|
-| Motor | {{ load_name | replace: "_", " " }} |
-| Total Power | {{ load_val.total_power }} W |
-| Nominal Voltage | {{ load_val.nominal_voltage }} V |
-| Throttle | {{ load_val.throttle | times: 100 }}% |
+| Motor | {{ load_choice | replace: "_", " " }} |
+| Total Power | {{ load_spec.total_power }} W |
+| Nominal Voltage | {{ load_spec.nominal_voltage }} V |
 
-{% endunless %}{% endfor %}
+{% endfor %}
 
 ---
 
@@ -113,6 +119,13 @@ Steady-state operating point based on the circuit setup configuration.
 {% for load in op.load_result.data %}{% for v in load.voltage %}{% assign load_name = v[0] %}{% assign load_v = v[1] %}{% assign load_i = load.current[load_name] %}| {{ load_name }} | {{ load_v | round: 2 }} | {{ load_i | round: 2 }} | {{ load_v | times: load_i | round: 0 }} |
 {% endfor %}{% endfor %}
 
+### Throttle Configuration
+
+| Load | Throttle |
+|------|----------|
+{% for load_entry in site.data.boat_rp2_circuit_setup.load %}{% assign load_cfg = load_entry[1] %}| {{ load_cfg.choice | replace: "_", " " }} | {{ load_cfg.throttle | times: 100 }}% |
+{% endfor %}
+
 {% if op.error.data.size > 0 %}
 <div style="background: #fdd; border-left: 4px solid #d00; padding: 0.5em 1em; margin: 1em 0;">
 <strong>⛔ Errors ({{ op.error.data.size }})</strong> — these issues may cause damage to the system and must be resolved.
@@ -135,8 +148,8 @@ Steady-state operating point based on the circuit setup configuration.
 
 | # | Warning |
 |---|---------|
-{% for w in op.warning.data %}| {{ forloop.index }} | {{ w }} |
-{% endfor %}
+{% for w in op.warning.data %}{% for warning in w %}| {{ w.x | round: 1 }} | {{ warning }} |
+{% endfor %}{% endfor %}
 
 </details>
 {% endif %}
@@ -195,8 +208,8 @@ Simulation sweeps throttle from 0% to 100% with no solar input, showing how the 
 
 | Throttle Input | Warning |
 |----------------|---------|
-{% for w in throttle_warnings %}| {{ w.x | times: 100 }}% | {{ w.warnings[0] }} |
-{% endfor %}
+{% for w in throttle_warnings %}{% for warning in w.warnings %}| {{ w.x | round: 1 }} | {{ warning }} |
+{% endfor %}{% endfor %}
 
 </details>
 {% endif %}
@@ -251,8 +264,8 @@ At low solar power levels, the battery discharge current exceeds the configured 
 
 | Solar Power | Warning |
 |-------------|---------|
-{% for w in panel_warnings %}| {{ w.x | times: 100 }}% | {{ w.warnings[0] }} |
-{% endfor %}
+{% for w in panel_warnings %}{% for warning in w.warnings %}| {{ w.x | round: 1 }} | {{ warning }} |
+{% endfor %}{% endfor %}
 
 </details>
 {% endif %}
@@ -323,8 +336,8 @@ During the voyage, the battery discharge limit is exceeded at several points due
 
 | Time (min) | Warning |
 |------------|---------|
-{% for w in voyage_warnings %}| {{ w.x | round: 1 }} | {{ w.warnings[0] }} |
-{% endfor %}
+{% for w in voyage_warnings %}{% for warning in w.warnings %}| {{ w.x | round: 1 }} | {{ warning }} |
+{% endfor %}{% endfor %}
 
 </details>
 {% endif %}

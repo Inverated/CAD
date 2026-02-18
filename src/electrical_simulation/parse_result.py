@@ -41,8 +41,10 @@ def parse_simulation_result(analysis, result, struc, SIMULATION_LOGGING=False, S
             branch_name = branch_name[1:]  # Remove 'v' prefix
         
         if "measured" in branch_name:
-                continue
+            continue
+        
         matched = False
+        
         for dic in result.values():
             if matched:
                 break

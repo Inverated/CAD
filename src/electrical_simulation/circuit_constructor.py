@@ -8,8 +8,10 @@ from .components.mppt import MPPT
 from .components.solar_panel_array import Solar_Array
 
 
-def build_circuit_from_json(circuit_config_loc: str, modifications: dict = {},
+def build_circuit_from_json(circuit_setup: json, modifications: dict = {},
                             component_logging=False, show_components=False, show_netlist=False, constants=None):
+    input_data = circuit_setup
+
     circuit = Circuit("Solar_Panel-Mppt-Battery-Motor Circuit Thingy")
     components = {
         "panel": [],
@@ -17,18 +19,13 @@ def build_circuit_from_json(circuit_config_loc: str, modifications: dict = {},
         "load": [],
         "wire": [],
         "mppt": []
-    }
-    
-    with open(circuit_config_loc, 'r') as f:
-        input_data = json.load(f)
+    }    
 
     component_object = {}
     errors = []
     
-    # Battery Array
-    battery_array = input_data['battery_setup']
-    battery_choice = battery_array['choice']
-    battery_config = battery_array[battery_choice]
+    # Battery Array    
+    battery_config = input_data["battery"]
     
     if modifications.get('max_discharge_current') is not None:
         battery_config['max_discharge_current'] = modifications['max_discharge_current']
@@ -46,15 +43,19 @@ def build_circuit_from_json(circuit_config_loc: str, modifications: dict = {},
     errors.append(err) if err else None
 
     # MPPT Array
-    mppt_array = input_data['mppt_panel_setup']
+    mppt_array = input_data['mppt_panel']
     mppt_index = 0
     for key in mppt_array.keys():
         if not key.startswith("config_"):
             continue
+        
         config = mppt_array[key]
         for _ in range(config['count']):
             if modifications.get('panel_power_setting') is not None:
-                config['panel_info']['power'] *= modifications['panel_power_setting']
+                config['panel_info']['calculated_power'] = config['panel_info']['power'] * modifications['panel_power_setting']
+            else:
+                config['panel_info']['calculated_power'] = config['panel_info']['power'] * config['panel_info'].get('solar_power', 1.0)
+
             solar_array = Solar_Array(
                 circuit, components, constants=constants, **config['panel_info'])
             mppt = MPPT(circuit, components, constants=constants, **config['mppt_info'])
@@ -75,18 +76,16 @@ def build_circuit_from_json(circuit_config_loc: str, modifications: dict = {},
 
     # Load/Motor
     index = 0
-    for key in input_data["load_setup"].keys():
-        if key == "description":
-            continue
-        load_name = f"{key}_load_i{index}"
+    for key in input_data["load"].keys():
+        load_name = f"arr{index}_load_{input_data['load'][key]['choice']}"
         
         if modifications.get('throttle_setting') is not None:
             if type(modifications['throttle_setting']) == list:
-                input_data['load_setup'][key]['throttle'] = modifications['throttle_setting'][index]
+                input_data['load'][key]['throttle'] = modifications['throttle_setting'][index]
             else:
-                input_data['load_setup'][key]['throttle'] = modifications['throttle_setting']
+                input_data['load'][key]['throttle'] = modifications['throttle_setting']
         
-        load = Load(circuit, components, load_name=load_name, constants=constants, **input_data['load_setup'][key])
+        load = Load(circuit, components, load_name=load_name, constants=constants, **input_data['load'][key])
         err = load.setup_load(battery_array, log=component_logging)
         
         component_object["load"] = component_object.get("load", []) + [load]

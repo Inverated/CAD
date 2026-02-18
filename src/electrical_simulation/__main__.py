@@ -38,6 +38,8 @@ def main():
                         help='Path to circuit setup JSON (e.g. constant/electrical/circuit_setup.json)')
     parser.add_argument('--constants', required=True,
                         help='Path to constants JSON (e.g. constant/electrical/constants.json)')
+    parser.add_argument('--components', required=True,
+                        help='Path to components JSON (e.g. constant/electrical/components.json)')
     parser.add_argument('--boat', required=True,
                         help='Boat name to select circuit configuration (e.g. rp1)')
     parser.add_argument('--voyage', default=None,
@@ -56,32 +58,38 @@ def main():
 
     # Load constants from JSON
     constants = json.load(open(args.constants))
+    components = json.load(open(args.components))
+    circuit_setup = json.load(open(args.circuit))
+    combine_config_setup(circuit_setup, components)
     ngspice_available = check_ngspice()
 
     output_dir = args.output
 
     if args.simulation_type == 'all':
-        run_operating_point_simulation(args, ngspice_available, output_dir, constants)
-        run_sweep_throttle(args, ngspice_available, output_dir, constants)
-        run_sweep_panel_power(args, ngspice_available, output_dir, constants)
-        run_voyage_simulation(args, ngspice_available, output_dir, constants)
+        run_operating_point_simulation(args, circuit_setup, ngspice_available, output_dir, constants)
+        run_sweep_throttle(args, circuit_setup, ngspice_available, output_dir, constants)
+        run_sweep_panel_power(args, circuit_setup, ngspice_available, output_dir, constants)
+        run_voyage_simulation(args, circuit_setup, ngspice_available, output_dir, constants)
 
     elif args.simulation_type == 'operating_point':
-        run_operating_point_simulation(args, ngspice_available, output_dir, constants)
+        run_operating_point_simulation(args, circuit_setup, ngspice_available, output_dir, constants)
 
     elif args.simulation_type == 'sweep_throttle':
-        run_sweep_throttle(args, ngspice_available, output_dir, constants)
+        run_sweep_throttle(args, circuit_setup, ngspice_available, output_dir, constants)
 
     elif args.simulation_type == 'sweep_panel_power':
-        run_sweep_panel_power(args, ngspice_available, output_dir, constants)
+        run_sweep_panel_power(args, circuit_setup, ngspice_available, output_dir, constants)
 
     elif args.simulation_type == 'voyage':
-        run_voyage_simulation(args, ngspice_available, output_dir, constants)
+        run_voyage_simulation(args, circuit_setup, ngspice_available, output_dir, constants)
 
-def run_operating_point_simulation(args, ngspice_available, output_dir, constants):
-    circuit, component_object, errors = build_circuit_from_json(args.circuit, constants=constants)
+def run_operating_point_simulation(args, circuit_setup, ngspice_available, output_dir, constants):
+    circuit, component_object, errors = build_circuit_from_json(circuit_setup=circuit_setup, constants=constants)
     analysis, result = begin_simulation(
-        circuit, component_object, errors, ngspice_available,
+        circuit=circuit,
+        component_object=component_object, 
+        errors=errors,
+        ngspice_available=ngspice_available,
         simulation_logging=args.verbose, show_errors=args.verbose,
         show_warnings=args.verbose,
         constants=constants)
@@ -90,9 +98,9 @@ def run_operating_point_simulation(args, ngspice_available, output_dir, constant
     print(f"✓ Operating point simulation complete: {output_dir}.operating_point.json")
 
 
-def run_sweep_throttle(args, ngspice_available, output_dir, constants):
+def run_sweep_throttle(args, circuit_setup, ngspice_available, output_dir, constants):
     sweep_throttle(
-        circuit_config_loc=args.circuit,
+        circuit_setup=circuit_setup,
         save_path=output_dir + ".sweep_throttle",
         ngspice_available=ngspice_available,
         simulation_logging=args.verbose,
@@ -100,9 +108,9 @@ def run_sweep_throttle(args, ngspice_available, output_dir, constants):
         constants=constants) 
     print(f"✓ Sweep throttle simulation complete: {output_dir}.sweep_throttle")
     
-def run_sweep_panel_power(args, ngspice_available, output_dir, constants):
+def run_sweep_panel_power(args, circuit_setup, ngspice_available, output_dir, constants):
     sweep_panel_power(
-        circuit_config_loc=args.circuit,
+        circuit_setup=circuit_setup,
         save_path=output_dir + ".sweep_panel_power",
         ngspice_available=ngspice_available,
         simulation_logging=args.verbose,
@@ -110,14 +118,31 @@ def run_sweep_panel_power(args, ngspice_available, output_dir, constants):
         constants=constants)   
     print(f"✓ Sweep panel power simulation complete: {output_dir}.sweep_panel_power")
 
-def run_voyage_simulation(args, ngspice_available, output_dir, constants):
+def run_voyage_simulation(args, circuit_setup, ngspice_available, output_dir, constants):
     start_voyage(
-        circuit_config_loc=args.circuit,
+        circuit_setup=circuit_setup,
         voyage_config_loc=args.voyage,
         save_path=output_dir + ".voyage",
         ngspice_available=ngspice_available,
         constants=constants) 
     print(f"✓ Voyage simulation complete: {output_dir}.voyage")
- 
+
+def combine_config_setup(circuit_config, component_config):
+    if circuit_config.get("mppt_panel") is not None:
+        for key, config in circuit_config["mppt_panel"].items():
+            panel_choice = config["panel_info"]["choice"]
+            mppt_choice = config["mppt_info"]["choice"]
+            config["panel_info"].update(component_config["Panel"][panel_choice])
+            config["mppt_info"].update(component_config["MPPT"][mppt_choice])
+            
+    if circuit_config.get("load") is not None:
+        for key, load in circuit_config["load"].items():
+            load_choice = load["choice"]
+            load.update(component_config["Load"][load_choice])
+            
+    if circuit_config.get("battery") is not None:
+        battery_choice = circuit_config["battery"]["choice"]
+        circuit_config["battery"].update(component_config["Battery"][battery_choice])
+     
 if __name__ == "__main__":
     main()

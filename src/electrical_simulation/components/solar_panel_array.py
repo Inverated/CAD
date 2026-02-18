@@ -5,7 +5,7 @@ class Solar_Array:
         self.constants = constants
         self.PANEL_IN_PARALLEL = kwargs.get("in_parallel")
         self.PANEL_IN_SERIES = kwargs.get("in_series")
-        self.PANEL_CURRENT = max(self.constants["EPSILON"], kwargs.get("power") / kwargs.get("voltage"))
+        self.PANEL_CURRENT = max(self.constants["EPSILON"], kwargs.get("calculated_power") / kwargs.get("voltage"))
         self.PANEL_INTERNAL_R = kwargs.get("voltage") / self.PANEL_CURRENT
         self.PANEL_ARRAY_TOTAL_VOLTAGE = self.PANEL_IN_SERIES * kwargs.get("voltage")
         self.PANEL_ARRAY_TOTAL_CURRENT = self.PANEL_IN_PARALLEL * self.PANEL_CURRENT

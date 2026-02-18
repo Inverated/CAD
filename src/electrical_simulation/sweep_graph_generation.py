@@ -200,12 +200,12 @@ def generate_graph(results: list, x_axis: list, x_label: str = "",
     
     if save_path:
         with open(save_path + "." + WARNING_FILE_NAME, 'w') as f:
-            to_delete = []
+            """ to_delete = []
             for i in range(1, len(warning_points)):
                 if warning_points[i-1]['x'] == warning_points[i]['x']:
                     to_delete.insert(0, i)
             for idx in to_delete:
-                warning_points.pop(idx)
+                warning_points.pop(idx) """
                 
             json.dump(warning_points, f, indent=4)
             print(f"({len(warning_points)})\tWarning points saved to {save_path}.{WARNING_FILE_NAME}")

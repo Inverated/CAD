@@ -55,7 +55,7 @@ Total Input Power: {input_power:.2f} W, restricted to: {actual_voltage_output*ac
         voltage = float(list(each["voltage"].values())[0])
         current = float(list(each["current"].values())[0])
         actual_power = voltage * current
-
+        print(voltage, current, actual_power)
         mppt_count = len(component_object.get("mppt", []))
         temp_eff_calculation = 0.0
         for i in range(mppt_count):
@@ -66,13 +66,11 @@ Total Input Power: {input_power:.2f} W, restricted to: {actual_voltage_output*ac
         power_rating = component_object["load"][index].power_rating() * average_efficiency
         throttle_setting = component_object["load"][index].throttle_setting()
         actual_throttle = actual_power / power_rating if power_rating > 0 else 0.0
-
         if (throttle_setting - actual_throttle) * 100 > constants["POWER_MISMATCH_TOLERANCE_PERCENTAGE"]:
             actual_throttle = actual_power / power_rating if power_rating > 0 else 0.0
             result["warning"]["data"].append(f"Battery array is being over-discharged. Motor {index} \
 has been restricted to {actual_throttle*100:.2f}% instead of {throttle_setting*100:.2f}% throttle level.")
         
-
     result["warning"]["array_count"] = len(result["warning"]["data"])
     return None
         
