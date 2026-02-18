@@ -1,3 +1,4 @@
+import json
 import re
 
 def parse_simulation_result(analysis, result, struc, SIMULATION_LOGGING=False, SHOW_PANELS=False, constants=None):
@@ -12,6 +13,7 @@ def parse_simulation_result(analysis, result, struc, SIMULATION_LOGGING=False, S
         if "measured" in node_name:
             continue
         matched = False
+        
         for dic in result.values():
             if matched:
                 break
@@ -33,7 +35,7 @@ def parse_simulation_result(analysis, result, struc, SIMULATION_LOGGING=False, S
                     dic["data"][0]["voltage"][node_name] = float(node.as_ndarray()[0])
 
         if not matched:
-            print(f"Node {node_name}: {float(node.as_ndarray()[0]):.2f} V")
+            print(f"Missing node ({node_name}): {float(node.as_ndarray()[0]):.2f} V")
 
     # Branch currents
     for branch_name, branch in analysis.branches.items():

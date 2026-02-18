@@ -1,6 +1,6 @@
 from ..components.battery_array import Battery_Array
 
-RAWSPICE_ITERATIONS = 1e2
+RAWSPICE_ITERATIONS = 1e6
 
 class Load:
     def __init__(self, circuit, components, constants=None, **kwargs):
@@ -24,7 +24,7 @@ class Load:
         self.circuit.V(f"{self.load_name}", POWER_SOURCE, f"{self.load_name}", self.constants["GROUNDING_RESISTANCE"])
         # Restrict total current into loads from bus first, then in Load, calcuate percentage restricted
         # and multiply that by the current demand in each load
-        print(MOTOR_CURRENT_DEMAND, BATTERY_MAX_DISCHARGE_CURRENT)
+        #print(MOTOR_CURRENT_DEMAND, BATTERY_MAX_DISCHARGE_CURRENT)
         self.circuit.raw_spice += f"B{self.load_name} {self.load_name} 0 I = I(V{POWER_SOURCE_ID})<-{BATTERY_MAX_DISCHARGE_CURRENT} ? {MOTOR_CURRENT_DEMAND}+(I(V{POWER_SOURCE_ID})+{BATTERY_MAX_DISCHARGE_CURRENT})*{RAWSPICE_ITERATIONS} : {MOTOR_CURRENT_DEMAND})\n"
         
         self.components["load"].append(f"{self.load_name}")
