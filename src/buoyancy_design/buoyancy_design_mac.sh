@@ -163,6 +163,9 @@ def get_boat_bounds(doc):
             continue
         if not obj.TypeId.startswith('Part::'):
             continue
+        name = obj.Label or obj.Name
+        if '_indicator' in name:
+            continue
 
         bbox = obj.Shape.BoundBox
         if not bbox.isValid():

@@ -234,6 +234,11 @@ def get_boat_bounds(doc) -> dict:
         if not obj.TypeId.startswith('Part::'):
             continue
 
+        # Skip indicator objects (direction arrows) from bounds
+        name = obj.Label or obj.Name
+        if '_indicator' in name:
+            continue
+
         bbox = obj.Shape.BoundBox
         if not bbox.isValid():
             continue
