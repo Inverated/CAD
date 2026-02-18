@@ -6,5 +6,10 @@ artifact/
 artifacts/
 *.FCStd
 *.FCStd1
+*.AppImage
+
+docs/downloads/*.step
+docs/renders/*.png
 docs/dependency_graph.png
+
 squashfs-root/
