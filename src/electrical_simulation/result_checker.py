@@ -55,7 +55,7 @@ Total Input Power: {input_power:.2f} W, restricted to: {actual_voltage_output*ac
         voltage = float(list(each["voltage"].values())[0])
         current = float(list(each["current"].values())[0])
         actual_power = voltage * current
-        print(voltage, current, actual_power)
+
         mppt_count = len(component_object.get("mppt", []))
         temp_eff_calculation = 0.0
         for i in range(mppt_count):

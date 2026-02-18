@@ -27,7 +27,7 @@ def check_ngspice():
         return True
     except Exception as e:
         print(f"NgSpice initialization failed: {e}")
-        print("Follow steps indicated in readme.md to install NgSpice.")
+        print("Follow steps indicated in wiki to install NgSpice.")
         return False
 
 
