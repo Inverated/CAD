@@ -13,12 +13,12 @@
     {
       "name": "Midday Cruising",
       "duration_minutes": 90,
-      "throttle": 1.0,
-      "solar_power": 0.0
+      "throttle": 0.5,
+      "solar_power": 0.9
     },
     {
       "name": "Afternoon Sprint",
-      "duration_minutes": 30,
+      "duration_minutes": 90,
       "throttle": 1.0,
       "solar_power": 0.8
     },

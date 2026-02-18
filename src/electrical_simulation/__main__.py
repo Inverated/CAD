@@ -18,8 +18,6 @@ from .result_saver import save_to_file
 from .simulation_over_time import start_voyage
 from .simulation_sweeper import sweep_panel_power, sweep_throttle
 
-constants = None
-
 def check_ngspice():
     try:
         from PySpice.Spice.NgSpice.Shared import NgSpiceShared

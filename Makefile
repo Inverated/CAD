@@ -196,6 +196,12 @@ sync-docs:
 		fi \
 	done
 	@echo "  Copied $$(ls artifact/*.json 2>/dev/null | wc -l | tr -d ' ') JSON files to docs/_data/"
+	@# Copy electrical config files to _data
+	@find $(CONST_DIR)/electrical -name '*.json' | while read file; do \
+		relpath=$$(echo "$$file" | sed 's|$(CONST_DIR)/electrical/||; s|/|_|g; s|\.json$$||'); \
+		cp "$$file" "docs/_data/$${relpath}.json"; \
+	done
+	@echo "  Copied electrical config files to docs/_data/"
 	@# Copy PNG renders
 	@if ls artifact/*.png 1>/dev/null 2>&1; then \
 		cp artifact/*.png docs/renders/; \
@@ -611,10 +617,10 @@ ELECTRICAL_CIRCUIT_FILE := $(ELECTRICAL_CONST_DIR)/boat/${BOAT}/circuit_setup.js
 ELECTRICAL_VOYAGE_FILE := $(ELECTRICAL_CONST_DIR)/voyage_setup.json
 ELECTRICAL_CONSTANTS_FILE := $(ELECTRICAL_CONST_DIR)/constants.json
 SIMULATION_TYPE ?= all
-ELECTRICAL_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).$(CONFIGURATION).electrical_simulation
+ELECTRICAL_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).electrical_simulation
 
 $(ELECTRICAL_ARTIFACT): $(ELECTRICAL_CIRCUIT_FILE) $(ELECTRICAL_CONSTANTS_FILE) $(ELECTRICAL_SOURCE) | $(ARTIFACT_DIR)
-	@echo "Running electrical simulation ($(SIMULATION_TYPE)): $(BOAT).$(CONFIGURATION)"
+	@echo "Running electrical simulation ($(SIMULATION_TYPE)): $(BOAT)"
 	@$(PYTHON) -m src.electrical_simulation \
 		--circuit $(ELECTRICAL_CIRCUIT_FILE) \
 		--constants $(ELECTRICAL_CONSTANTS_FILE) \

@@ -15,7 +15,8 @@ def sweep_throttle(circuit_config_loc, save_path, ngspice_available,
         if simulation_logging:
             print(f"\n{constants['BARF']}Starting Simulation with Throttle Setting: {throttle*100:.2f}%{constants['BARE']}")
         
-        circuit, component_object, errors = build_circuit_from_json(circuit_config_loc, {'throttle_setting': throttle}, constants=constants)
+        # Set panel power to 0 during throttle sweep to isolate the effect of throttle changes on the system
+        circuit, component_object, errors = build_circuit_from_json(circuit_config_loc, {'throttle_setting': throttle, 'panel_power_setting': 0}, constants=constants)
         analysis, result = begin_simulation(circuit, component_object, errors, ngspice_available, constants=constants)
         results.append(result)
     

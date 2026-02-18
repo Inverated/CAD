@@ -11,6 +11,7 @@ DOTTED_STYLE = ":"     #'-', '--', '-.', ':', 'None', ' ', '', 'solid', 'dashed'
 
 IMG_FILE_NAME = "sweep_simulation_results.png"
 WARNING_FILE_NAME = "sweep_simulation_warnings.json"
+ERROR_FILE_NAME = "sweep_simulation_errors.json"
 
 
 def generate_graph(results: list, x_axis: list, x_label: str = "",
@@ -182,7 +183,17 @@ def generate_graph(results: list, x_axis: list, x_label: str = "",
     if save_path:
         with open(save_path + "." + WARNING_FILE_NAME, 'w') as f:
             json.dump(warning_points, f, indent=4)
-            print(f"Warning points saved to {save_path}.{WARNING_FILE_NAME}")
+            print(f"({len(warning_points)})\tWarning points saved to {save_path}.{WARNING_FILE_NAME}")
+            
+        with open(save_path + "." + ERROR_FILE_NAME, 'w') as f:
+            errors = []
+            for result in results:
+                for err in result['error']['data']:
+                    if err not in errors:
+                        errors.append(err)
+            json.dump(errors, f, indent=4)
+            print(f"({len(errors)})\tErrors saved to {save_path}.{ERROR_FILE_NAME}")
+                
             
         save_file = save_path + "." + IMG_FILE_NAME
         plt.savefig(save_file, dpi=300, bbox_inches='tight')
