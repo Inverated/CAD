@@ -69,6 +69,8 @@ Battery chemistry: **{{ bat_choice }}**
 
 ---
 
+<br>
+
 ## Operating Point
 
 Steady-state operating point based on the circuit setup configuration.
@@ -145,6 +147,8 @@ Steady-state operating point based on the circuit setup configuration.
 
 ---
 
+<br> 
+
 ## Sweep: Throttle vs Electrical Response (No Solar)
 
 Simulation sweeps throttle from 0% to 100% with no solar input, showing how the electrical system responds to varying motor load on battery power alone.
@@ -199,6 +203,8 @@ Simulation sweeps throttle from 0% to 100% with no solar input, showing how the 
 
 ---
 
+<br>
+
 ## Sweep: Panel Power vs Electrical Response (Full Throttle)
 
 Simulation sweeps solar panel output from 0% to 100% at full throttle, showing how increasing solar contribution reduces battery discharge.
@@ -252,6 +258,8 @@ At low solar power levels, the battery discharge current exceeds the configured 
 {% endif %}
 
 ---
+
+<br>
 
 ## Voyage Simulation
 

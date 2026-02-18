@@ -14,6 +14,10 @@ def cross_check_result(analysis, component_object, result, constants=None):
     for each in load["data"]:
         for key in each["current"]:
             total_load_current += each["current"][key]
+    
+    for each in load_balancer["data"]:
+        for key in each["current"]:
+            total_load_current += each["current"][key]
             
     if total_mppt_output - total_battery_input - total_load_current > constants["EPSILON"]:
         result["error"]["data"].append(f"Kirchhoff's Law violated. MPPT Output Current ({total_mppt_output} A) \
