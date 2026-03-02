@@ -38,7 +38,8 @@ class Battery_Array:
                     self.circuit.R(f"{battery_name}_internal", battery_neg, f"{prev_battery_name}_positive", self.constants["WIRE_RESISTANCE"])
                 
             self.components["battery"].append(battery_row)
-                        
+        
+        # Wire positive terminal of each parallel string      
         for index, row in enumerate(self.components["battery"]):
             battery_row_end = row[-1]
             positive_node = f"{battery_row_end}_positive"

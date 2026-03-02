@@ -22,10 +22,11 @@ class Load:
     def throttle_setting(self):
         return self.throttle
     
-    def __str__(self, MOTOR_POWER_DEMAND=None, MOTOR_CURRENT_DEMAND=None, MOTOR_RESISTANCE=None):
+    def __str__(self):
+        current = self.MOTOR_POWER_DEMAND / self.MOTOR_VOLTAGE if self.MOTOR_VOLTAGE > 0 else 0
         return f"""
 {self.constants['BARF']}Load Setup (Before balancing){self.constants['BARE']}
-Motor Power Demand: {MOTOR_POWER_DEMAND} W
-Motor Current Demand: {MOTOR_CURRENT_DEMAND:.2f} A
-Motor Resistance: {MOTOR_RESISTANCE:.2f} Ohm
+Motor Power Demand: {self.MOTOR_POWER_DEMAND} W
+Motor Current Demand: {current:.2f} A
+Motor Resistance: {self.MOTOR_VOLTAGE / current if self.MOTOR_POWER_DEMAND > 0 else 0:.2f} Ohm
 """

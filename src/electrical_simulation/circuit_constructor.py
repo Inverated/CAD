@@ -93,17 +93,19 @@ def build_circuit_from_json(circuit_setup: json, modifications: dict = {},
         load = Load(circuit, components, load_name=load_name, constants=constants, **input_data['load'][key])
         
         #OLD
-        load = Load_BAK(circuit, components, load_name=load_name, constants=constants, **input_data['load'][key])
-        err = load.setup_load(battery_array, log=component_logging)
-        errors.append(err) if err else None
+        #load = Load_BAK(circuit, components, load_name=load_name, constants=constants, **input_data['load'][key])
+        #err = load.setup_load(battery_array, log=component_logging)
+        #errors.append(err) if err else None
         #END OLD
         
         component_object["load"] = component_object.get("load", []) + [load]
         index += 1  
     
     #NEW
-    #load_array = Load_Array(circuit, components, constants, component_object["load"])
-
+    for load in component_object["load"]:
+        print(load)
+    load_array = Load_Array(circuit, components, constants, component_object["load"])
+    component_object["load_array"] = load_array
     #errors.append(err) if err else None
 
         

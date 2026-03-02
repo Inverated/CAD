@@ -8,22 +8,27 @@ class MPPT:
         self.MPPT_MAX_INPUT_CURRENT = kwargs.get("max_input_current")
         self.MPPT_MAX_OUTPUT_VOLTAGE = kwargs.get("max_output_voltage")
         self.MPPT_MAX_OUTPUT_CURRENT = kwargs.get("max_output_current")
+        
+        self.MPPT_INPUT_VOLTAGE = None
+        self.MPPT_INPUT_CURRENT = None
+        
         self.MPPT_OUTPUT_BUFFER_VOLTAGE = self.constants["MPPT_BATTERY_VOLTAGE_BUFFER"]
         self.MPPT_EFFICIENCY = kwargs.get("efficiency")
         self.circuit = circuit
         self.components = components
         self.terminal = None
         self.MPPT_OUTPUT_VOLTAGE = None
+        self.array_number = None
     
     def setup_mppt(self, array_number, solar_array: Solar_Array, battery_array: Battery_Array, log=False):
-        MPPT_INPUT_VOLTAGE = solar_array.get_total_voltage()
-        MPPT_INPUT_CURRENT = solar_array.get_total_current()
-        MPPT_MAX_INPUT_POWER = MPPT_INPUT_VOLTAGE * MPPT_INPUT_CURRENT
-        MPPT_INPUT_RESISTANCE = MPPT_INPUT_VOLTAGE / MPPT_INPUT_CURRENT
+        self.MPPT_INPUT_VOLTAGE = solar_array.get_total_voltage()
+        self.MPPT_INPUT_CURRENT = solar_array.get_total_current()
+        MPPT_MAX_INPUT_POWER = self.MPPT_INPUT_VOLTAGE * self.MPPT_INPUT_CURRENT
+        MPPT_INPUT_RESISTANCE = self.MPPT_INPUT_VOLTAGE / self.MPPT_INPUT_CURRENT if self.MPPT_INPUT_CURRENT > 0 else 0
         
         self.MPPT_OUTPUT_VOLTAGE = battery_array.get_total_voltage() + self.MPPT_OUTPUT_BUFFER_VOLTAGE
         MPPT_OUTPUT_POWER = MPPT_MAX_INPUT_POWER * self.MPPT_EFFICIENCY
-        MPPT_OUTPUT_CURRENT = MPPT_OUTPUT_POWER / self.MPPT_OUTPUT_VOLTAGE
+        MPPT_OUTPUT_CURRENT = (MPPT_OUTPUT_POWER / self.MPPT_OUTPUT_VOLTAGE) if self.MPPT_OUTPUT_VOLTAGE > 0 else 0
 
         SOLAR_POWER_RAIL = solar_array.get_terminal()
         self.circuit.R(f"arr{array_number}_mppt_input_load", 
@@ -42,15 +47,16 @@ class MPPT:
 
         self.components["mppt"].append(f"arr{array_number}_mppt_current_reg")
         self.components["wire"].append(f"arr{array_number}_mppt_out_wire")
+        self.array_number = array_number
         if log:
-            print(self.__str__(array_number, MPPT_INPUT_VOLTAGE, MPPT_MAX_INPUT_POWER, MPPT_OUTPUT_POWER, MPPT_OUTPUT_CURRENT))
+            print(self)
             
         if abs(battery_array.get_total_voltage() - self.MPPT_MAX_OUTPUT_VOLTAGE) > self.MPPT_OUTPUT_BUFFER_VOLTAGE:
             return f"Mismatch between battery voltage ({battery_array.get_total_voltage()} V) and MPPT max output voltage ({self.MPPT_MAX_OUTPUT_VOLTAGE} V) exceeds tolerance of {self.MPPT_OUTPUT_BUFFER_VOLTAGE} V"
-        if MPPT_INPUT_VOLTAGE > self.MPPT_MAX_INPUT_VOLTAGE:
-            return f"(Array {array_number}) Panel input voltage ({MPPT_INPUT_VOLTAGE} V) exceeds max MPPT input voltage ({self.MPPT_MAX_INPUT_VOLTAGE} V)"
-        if MPPT_INPUT_CURRENT > self.MPPT_MAX_INPUT_CURRENT:
-            return f"(Array {array_number}) Panel input current ({MPPT_INPUT_CURRENT} A) exceeds max MPPT input current ({self.MPPT_MAX_INPUT_CURRENT} A)"
+        if self.MPPT_INPUT_VOLTAGE > self.MPPT_MAX_INPUT_VOLTAGE:
+            return f"(Array {array_number}) Panel input voltage ({self.MPPT_INPUT_VOLTAGE} V) exceeds max MPPT input voltage ({self.MPPT_MAX_INPUT_VOLTAGE} V)"
+        if self.MPPT_INPUT_CURRENT > self.MPPT_MAX_INPUT_CURRENT:
+            return f"(Array {array_number}) Panel input current ({self.MPPT_INPUT_CURRENT} A) exceeds max MPPT input current ({self.MPPT_MAX_INPUT_CURRENT} A)"
         else:
             return None
     
@@ -70,12 +76,12 @@ class MPPT:
             return "MPPT has not been set up yet."
         return self.MPPT_OUTPUT_VOLTAGE
     
-    def __str__(self, array_number, MPPT_INPUT_VOLTAGE, MPPT_MAX_INPUT_POWER, MPPT_OUTPUT_POWER, MPPT_OUTPUT_CURRENT):
+    def __str__(self):
         return f"""
-{self.constants['BARF']}MPPT Setup {array_number + 1}{self.constants['BARE']}
-Input Voltage: {MPPT_INPUT_VOLTAGE} V
+{self.constants['BARF']}MPPT Setup {self.array_number + 1}{self.constants['BARE']}
+Input Voltage: {self.MPPT_INPUT_VOLTAGE} V
 Output Voltage: {self.MPPT_OUTPUT_VOLTAGE} V
-Max Power: {MPPT_MAX_INPUT_POWER} W
-Output Power: {MPPT_OUTPUT_POWER:.2f} W
-Output Current: {MPPT_OUTPUT_CURRENT:.2f} A
+Max Power: {self.MPPT_INPUT_VOLTAGE * self.MPPT_INPUT_CURRENT} W
+Output Power: {self.MPPT_OUTPUT_POWER:.2f} W
+Output Current: {self.MPPT_OUTPUT_CURRENT:.2f} A
 """

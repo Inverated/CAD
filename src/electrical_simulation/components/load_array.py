@@ -3,21 +3,27 @@ class Load_Array():
         self.circuit = circuit
         self.components = components
         self.constants = constants
-        self.sub_circuit = create_array(load_list)
+        self.sub_circuit = self.__create_array(load_list)
         self.terminal = None
         self.terminal_id = None
             
-    def create_array(self, load_list):
+    def __create_array(self, load_list):
         self.terminal = f"total_load_in_voltage"
         self.terminal_id = f"total_load_in_current"
         
-        for load in load_list:
+        for index, load in enumerate(load_list):
             load_name = load.name()
             load_pos = f"{load_name}_positive"
             load_neg = f"{load_name}_negative"
             
-            self.circuit.V(load_pos, load_neg, self.constants["GROUNDING_RESISTANCE"])
-            
+            if index == 0:
+                self.circuit.V(self.terminal, load_pos, self.constants["GROUNDING_RESISTANCE"])
+            else:
+                prev_load_name = load_list[index-1].name()
+                self.circuit.R(f"load_{index}_internal", load_pos, f"{prev_load_name}_positive", self.constants["WIRE_RESISTANCE"])
+                    
+            self.circuit.R(f"load_{index}_grounding", load_neg, self.circuit.gnd, self.constants["GROUNDING_RESISTANCE"])
+    
     def get_terminal(self):
         return self.terminal
     
