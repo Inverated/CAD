@@ -99,10 +99,10 @@ def build_circuit_from_json(circuit_setup: json, modifications: dict = {},
         errors.append(err) if err else None
         #END OLD
         
-        #load_arr.append(load)
+        load_arr.append(load)
         index += 1  
         
-    #component_object["load"] = load_arr
+    component_object["load"] = load_arr
     
     #NEW
     #load_array = Load_Array(circuit, components, constants, load_arr)
