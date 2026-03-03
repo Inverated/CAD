@@ -1,8 +1,6 @@
 features:
 
 - Add multiple voyages for each config
-- Generate intervals within sections in voyage instead of blocks
-
 
 bug-fix:
 
