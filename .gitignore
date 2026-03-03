@@ -9,3 +9,4 @@ artifacts/
 *.AppImage
 
 squashfs-root/
+*.AppImage

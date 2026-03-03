@@ -1,6 +1,10 @@
 import json
 
-from PySpice.Spice.Netlist import Circuit
+from PySpice.Spice.Netlist import Circuit # type: ignore
+
+from src.electrical_simulation.components.load_bak import Load_BAK
+
+from .components.load_array import Load_Array
 from .components.load_balancer import Load_Balancer
 from .components.load import Load
 from .components.battery_array import Battery_Array
@@ -76,21 +80,40 @@ def build_circuit_from_json(circuit_setup: json, modifications: dict = {},
 
     # Load/Motor
     index = 0
+    load_arr = []
     for key in input_data["load"].keys():
         load_name = f"arr{index}_load_{input_data['load'][key]['choice']}"
-        
+
         if modifications.get('throttle_setting') is not None:
             if type(modifications['throttle_setting']) == list:
                 input_data['load'][key]['throttle'] = modifications['throttle_setting'][index]
             else:
                 input_data['load'][key]['throttle'] = modifications['throttle_setting']
         
+        #NEW
         load = Load(circuit, components, load_name=load_name, constants=constants, **input_data['load'][key])
-        err = load.setup_load(battery_array, log=component_logging)
+        #END NEW
         
-        component_object["load"] = component_object.get("load", []) + [load]
-        errors.append(err) if err else None
+        #OLD
+        #load = Load_BAK(circuit, components, load_name=load_name, constants=constants, **input_data['load'][key])
+        #err = load.setup_load(battery_array, log=component_logging)
+        #errors.append(err) if err else None
+        #END OLD
+        
+        load_arr.append(load)
         index += 1  
+        
+    component_object["load"] = load_arr
+    
+    #NEW
+    load_array = Load_Array(circuit, components, constants, load_arr)
+    err = load_array.setup_loads(battery_array)
+    component_object["l_array"] = load_array
+    errors.append(err) if err else None
+    #END NEW
+    
+    #print(component_object["load_array"])
+
         
     # Load Balancer (One is enough to restrict battery output)
     load_balancer = Load_Balancer(circuit, components, constants=constants)

@@ -12,9 +12,11 @@ class Solar_Array:
         self.PANEL_ARRAY_TOTAL_POWER = self.PANEL_ARRAY_TOTAL_VOLTAGE * self.PANEL_ARRAY_TOTAL_CURRENT
         self.terminal = None
         self.components = components
+        self.array_number = None
 
     # Current source: Return terminal name only
     def create_panels(self, array_number, log=False):
+        self.array_number = array_number
         for p in range(self.PANEL_IN_PARALLEL):
             panel_row = []
             for s in range(self.PANEL_IN_SERIES):
@@ -54,7 +56,7 @@ class Solar_Array:
         
        
         if log:
-            print(self.__str__(array_number))
+            print(self)
             
         return None
     
@@ -69,9 +71,9 @@ class Solar_Array:
     def get_total_current(self):
         return self.PANEL_ARRAY_TOTAL_CURRENT
     
-    def __str__(self, array_number=None):
+    def __str__(self):
         return f"""\
-{self.constants['BARF']}Solar Array Setup {(array_number + 1) if array_number else 1}{self.constants['BARE']}
+{self.constants['BARF']}Solar Array Setup {self.array_number + 1}{self.constants['BARE']}
 Configuration: {self.PANEL_IN_SERIES} in series, {self.PANEL_IN_PARALLEL} in parallel
 Total Voltage: {self.PANEL_ARRAY_TOTAL_VOLTAGE} V
 Total Current: {self.PANEL_ARRAY_TOTAL_CURRENT} A
