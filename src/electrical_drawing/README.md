@@ -36,6 +36,23 @@ One page is produced per MPPT instance (a `config_N` block with `count: 3`
 yields three pages), plus one shared battery bus page. Page counts: rp1 and rp2
 give 3 pages, rp3 gives 4.
 
+## Example output
+
+An MPPT page — panel array, MPPT, and the two tags handing off to the bus page
+(rp2, 2s2p array):
+
+![rp2 MPPT1 page](../../docs/images/electrical_drawing/rp2.mppt1_panel.png)
+
+The shared battery bus page for the same boat — two incoming tag pairs, both bus
+bars, the 2s1p bank and the load:
+
+![rp2 battery bus page](../../docs/images/electrical_drawing/rp2.battery_bus.png)
+
+The same page for rp3, where the tag stack grows to three pairs and the bank is
+2s2p:
+
+![rp3 battery bus page](../../docs/images/electrical_drawing/rp3.battery_bus.png)
+
 ## How pages connect
 
 Nets that cross a page boundary are drawn as schemdraw `Tag` elements in matched
