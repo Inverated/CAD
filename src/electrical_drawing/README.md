@@ -48,7 +48,11 @@ bars, the 2s1p bank and the load:
 
 ![rp2 battery bus page](../../docs/images/electrical_drawing/rp2.battery_bus.png)
 
-The same page for rp3, where the tag stack grows to three pairs and the bank is
+On this page the bus bars are the paralleling node, so every string — each
+battery string and each load — drops straight down from `B+` to `B-` with its own
+junction dot on each bar. No horizontal rails and no angled leads are needed.
+
+The same page for rp3, where the tag row grows to three pairs and the bank is
 2s2p:
 
 ![rp3 battery bus page](../../docs/images/electrical_drawing/rp3.battery_bus.png)

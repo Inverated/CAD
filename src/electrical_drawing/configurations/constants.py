@@ -22,8 +22,7 @@ MPPT_INPUT_LEAD = 2
 TAG_LEAD = 1.5
 
 # Battery bus drawing geometry.
-BUS_STUB = 1.5          # lead length from an incoming Tag to the bus bar
-BUS_SEGMENT = 3         # horizontal spacing between bus tap points
+BUS_SEGMENT = 2.5       # horizontal spacing between incoming tag tap points
 BUS_RAIL_GAP = 6        # vertical separation between the +ve and -ve bus bars
 
 
@@ -42,12 +41,17 @@ TAG_MIN_WIDTH = 1.5
 # Horizontal spacing between parallel strings, widened for arrays whose
 # elements carry wide labels.
 PANEL_SPACING = 2.5
-BATTERY_SPACING = 5
 
-# Loads carry wide name labels, so their output rails are run further right to
-# keep the bus tap clear of the text, and successive loads are spaced wider.
-LOAD_RAIL = 6
-LOAD_SPACING = 8
+# On the bus page each string taps the bars directly, so spacing only has to
+# clear the symbol labels: the designator sits left of a string, the value right.
+BATTERY_SPACING = 3.5
+LOAD_SPACING = 3.5
+
+# Horizontal gap left between groups on the bus page (tags -> bank -> loads).
+BANK_GAP = 3
+
+# Distance from a bus bar out to its row of incoming tags.
+TAG_ROW_GAP = 2.0
 
 # Vertical gap between the title and the top of a drawing.
 TITLE_OFFSET = 1.2
