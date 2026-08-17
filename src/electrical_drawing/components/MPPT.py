@@ -2,7 +2,21 @@ from schemdraw.elements import Element
 from schemdraw.segments import Segment, SegmentText
 
 class MPPT(Element):
-    def __init__(self, pin_gap=2, **kwargs):
+    """A 4-terminal MPPT charge controller.
+
+    Anchors: ``PV+``, ``PV-`` on the left (panel side) and ``BATT+``, ``BATT-``
+    on the right (battery side), plus ``center``.
+
+    Parameters
+    ----------
+    pin_gap:
+        Vertical distance between the two pins on each side. Match this to the
+        terminal separation of the array feeding it so the wires run straight.
+    name:
+        Text drawn inside the body, e.g. ``"MPPT1"``.
+    """
+
+    def __init__(self, pin_gap=2, name='MPPT', **kwargs):
         super().__init__(**kwargs)
         w = 3
         h = pin_gap * 2
@@ -29,7 +43,7 @@ class MPPT(Element):
         self.segments.append(Segment([(w, h*0.25), (w+pin, h*0.25)]))
         self.segments.append(SegmentText((w+pin-label_offset, h*0.25), 'BATT-', align=['right', 'center']))
 
-        self.segments.append(SegmentText((w/2, h/2), 'MPPT', align=['center', 'center'], fontsize=12))
+        self.segments.append(SegmentText((w/2, h/2), name, align=['center', 'center'], fontsize=12))
         
         self.anchors['PV+']  = (-pin, h*0.75)
         self.anchors['PV-']  = (-pin, h*0.25)

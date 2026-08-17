@@ -141,6 +141,8 @@ help:
 	@echo "  make lines                  - Generate lines plan (TechDraw with sections)"
 	@echo "  make lines-pdf              - Compile lines plan LaTeX to PDF"
 	@echo "  make electrical-simulation  - Run electrical simulation (SIMULATION_TYPE=operating_point, sweep_throttle, sweep_panel_power, voyage, or all)"
+	@echo "  make electrical-drawing     - Generate multi-page electrical schematics (PDF + SVG pages)"
+	@echo "  make electrical-drawing-all - Generate electrical schematics for every boat"
 	@echo ""
 	@echo "Parameter Targets:"
 	@echo "  make parameter              - Compute and save parameter to artifacts/"
@@ -158,6 +160,7 @@ help:
 	@echo "  make color BOAT=rp3 CONFIGURATION=closehaul MATERIAL=proa"
 	@echo "  make render BOAT=rp2 CONFIGURATION=closehaul"
 	@echo "  make electrical-simulation BOAT=rp2 SIMULATION_TYPE=voyage"
+	@echo "  make electrical-drawing BOAT=rp3"
 	@echo ""
 	@echo "FreeCAD: $(FREECAD)"
 
@@ -647,6 +650,39 @@ $(ELECTRICAL_ARTIFACT): $(ELECTRICAL_CIRCUIT_FILE) $(ELECTRICAL_CONSTANTS_FILE) 
 .PHONY: electrical-simulation
 electrical-simulation: $(ELECTRICAL_ARTIFACT)
 	@echo "✓ Electrical simulation completed"
+
+# ==============================================================================
+# ELECTRICAL DRAWING
+# ==============================================================================
+
+ELECTRICAL_DRAWING_DIR := $(SRC_DIR)/electrical_drawing
+ELECTRICAL_DRAWING_SOURCE := $(wildcard $(ELECTRICAL_DRAWING_DIR)/*.py) \
+	$(wildcard $(ELECTRICAL_DRAWING_DIR)/components/*.py) \
+	$(wildcard $(ELECTRICAL_DRAWING_DIR)/drawings/*.py) \
+	$(wildcard $(ELECTRICAL_DRAWING_DIR)/configurations/*.py) \
+	$(wildcard $(ELECTRICAL_DRAWING_DIR)/output/*.py)
+ELECTRICAL_BOAT_PARAMS_FILE := $(BOAT_FILE)
+ELECTRICAL_DRAWING_ARTIFACT := $(ARTIFACT_DIR)/$(BOAT).electrical_drawing
+
+$(ELECTRICAL_DRAWING_ARTIFACT): $(ELECTRICAL_CIRCUIT_FILE) $(COMPONENT_FILES) \
+		$(ELECTRICAL_BOAT_PARAMS_FILE) $(ELECTRICAL_DRAWING_SOURCE) | $(ARTIFACT_DIR)
+	@echo "Generating electrical drawing: $(BOAT)"
+	@$(PYTHON) -m src.electrical_drawing \
+		--circuit $(ELECTRICAL_CIRCUIT_FILE) \
+		--components $(COMPONENT_FILES) \
+		--boat-params $(ELECTRICAL_BOAT_PARAMS_FILE) \
+		--output $@
+	@echo "✓ Electrical drawing complete: $@"
+
+.PHONY: electrical-drawing
+electrical-drawing: $(ELECTRICAL_DRAWING_ARTIFACT)
+	@echo "✓ Electrical drawing completed for $(BOAT)"
+
+.PHONY: electrical-drawing-all
+electrical-drawing-all:
+	@for boat in $(BOATS); do \
+		$(MAKE) electrical-drawing BOAT=$$boat || true; \
+	done
 
 # ==============================================================================
 # TEMPLATE FOR NEW STAGES (copy this block and replace TEMPLATE/template)
